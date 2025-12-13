@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>РћРїРµСЂР°С‚РёРІРЅР° РєР°СЂС‚Р° Р—РћР— РћРґРµСЃСЊРєРѕС— РѕР±Р»Р°СЃС‚С– | 13.12.2025</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0f172a;
+      --bg-secondary: rgba(15, 23, 42, 0.97);
+      --bg-card: rgba(30, 41, 59, 0.5);
+      --bg-card-hover: #1e293b;
+      --border-color: #1e293b;
+      --text-primary: #ffffff;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent-blue: #3b82f6;
+      --accent-green: #22c55e;
+      --accent-green-light: #4ade80;
+      --accent-red: #ef4444;
+      --accent-red-light: #f87171;
+      --accent-amber: #fbbf24;
+      --accent-orange: #f97316;
+      --input-bg: #1e293b;
+      --input-border: #334155;
+      --shadow-color: rgba(0,0,0,0.4);
+    }
+    [data-theme="light"] {
+      --bg-primary: #f1f5f9;
+      --bg-secondary: rgba(255, 255, 255, 0.97);
+      --bg-card: rgba(241, 245, 249, 0.8);
+      --bg-card-hover: #e2e8f0;
+      --border-color: #cbd5e1;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --input-bg: #ffffff;
+      --input-border: #cbd5e1;
+      --shadow-color: rgba(0,0,0,0.1);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg-primary); color: var(--text-primary); overflow: hidden; transition: background 0.3s, color 0.3s; }
+    #map { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+    .header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: linear-gradient(to bottom, var(--bg-primary), var(--bg-primary), transparent); padding: 12px 16px 40px; pointer-events: none; }
+    .header-content { display: flex; align-items: center; gap: 12px; pointer-events: auto; }
+    .logo { width: 44px; height: 44px; background: linear-gradient(135deg, #fbbf24, #f97316); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(251, 191, 36, 0.3); }
+    .logo svg { width: 26px; height: 26px; color: white; }
+    .header-text h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.5px; }
+    .header-text p { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+    .theme-toggle { position: fixed; top: 16px; right: 400px; z-index: 1002; background: var(--bg-card); backdrop-filter: blur(10px); border: 1px solid var(--border-color); border-radius: 12px; padding: 8px; display: flex; gap: 4px; }
+    .theme-toggle button { width: 36px; height: 36px; border: none; border-radius: 8px; background: transparent; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .theme-toggle button:hover { background: var(--bg-card-hover); color: var(--text-primary); }
+    .theme-toggle button.active { background: var(--accent-blue); color: white; }
+    .sidebar { position: fixed; top: 0; right: 0; width: 380px; height: 100%; background: var(--bg-secondary); backdrop-filter: blur(20px); border-left: 1px solid var(--border-color); z-index: 1001; display: flex; flex-direction: column; transform: translateX(0); transition: transform 0.3s, background 0.3s; }
+    .sidebar.hidden { transform: translateX(100%); }
+    .sidebar-header { padding-top: 70px; }
+    .tabs { display: flex; border-bottom: 1px solid var(--border-color); }
+    .tab { flex: 1; padding: 12px; text-align: center; font-size: 13px; font-weight: 500; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; }
+    .tab:hover { color: var(--text-primary); background: var(--bg-card); }
+    .tab.active { color: var(--accent-blue); border-bottom-color: var(--accent-blue); }
+    .tab-content { display: none; flex: 1; flex-direction: column; overflow: hidden; }
+    .tab-content.active { display: flex; }
+    .district-overview { padding: 16px; overflow-y: auto; flex: 1; }
+    .district-card { padding: 14px; border-radius: 12px; margin-bottom: 10px; cursor: pointer; transition: all 0.2s; border: 1px solid var(--border-color); background: var(--bg-card); }
+    .district-card:hover { transform: translateX(4px); border-color: var(--accent-blue); }
+    .district-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .district-card-name { font-size: 15px; font-weight: 600; }
+    .district-card-status { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 20px; }
+    .district-card-status.power-yes { background: rgba(250, 204, 21, 0.15); color: #facc15; }
+    .district-card-status.power-partial { background: rgba(249, 115, 22, 0.15); color: #f97316; }
+    .district-card-status.power-no { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+    .district-card-status .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .district-card-status.power-yes .dot { background: #facc15; }
+    .district-card-status.power-partial .dot { background: #f97316; }
+    .district-card-status.power-no .dot { background: #3b82f6; }
+    .district-card-stats { display: flex; gap: 16px; font-size: 12px; color: var(--text-secondary); }
+    .district-card-stats span { display: flex; align-items: center; gap: 4px; }
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 16px; border-bottom: 1px solid var(--border-color); }
+    .stat-card { padding: 12px; border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; background: var(--bg-card); }
+    .stat-card:hover { background: var(--bg-card-hover); }
+    .stat-card.active { border-color: rgba(59, 130, 246, 0.5); background: rgba(59, 130, 246, 0.1); }
+    .stat-card.active-green { border-color: rgba(34, 197, 94, 0.5); background: rgba(34, 197, 94, 0.1); }
+    .stat-card.active-red { border-color: rgba(239, 68, 68, 0.5); background: rgba(239, 68, 68, 0.1); }
+    .stat-number { font-size: 28px; font-weight: 700; }
+    .stat-number.green { color: var(--accent-green-light); }
+    .stat-number.red { color: var(--accent-red-light); }
+    .stat-label { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
+    .filters { padding: 12px 16px; border-bottom: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 10px; }
+    .search-box { position: relative; }
+    .search-box svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--text-muted); }
+    .search-box input { width: 100%; padding: 10px 12px 10px 40px; background: var(--input-bg); border: 1px solid var(--input-border); border-radius: 10px; color: var(--text-primary); font-size: 14px; outline: none; transition: border-color 0.2s, background 0.3s; }
+    .search-box input:focus { border-color: var(--accent-blue); }
+    .search-box input::placeholder { color: var(--text-muted); }
+    select { width: 100%; padding: 10px 12px; background: var(--input-bg); border: 1px solid var(--input-border); border-radius: 10px; color: var(--text-primary); font-size: 14px; outline: none; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px; transition: background 0.3s; }
+    select:focus { border-color: var(--accent-blue); }
+    .facility-list { flex: 1; overflow-y: auto; }
+    .facility-item { padding: 12px 16px; border-bottom: 1px solid var(--border-color); cursor: pointer; transition: background 0.2s; display: flex; gap: 12px; align-items: flex-start; }
+    .facility-item:hover { background: var(--bg-card); }
+    .facility-status { width: 10px; height: 10px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+    .facility-status.on { background: var(--accent-green); }
+    .facility-status.off { background: var(--accent-red); }
+    .facility-info { flex: 1; min-width: 0; }
+    .facility-name { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .facility-meta { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+    .facility-tags { display: flex; gap: 8px; margin-top: 6px; font-size: 11px; color: var(--text-secondary); }
+    .facility-tags span.heat { color: var(--accent-amber); }
+    .facility-arrow { color: var(--text-muted); flex-shrink: 0; margin-top: 4px; }
+    .detail-view { padding: 16px; display: none; flex-direction: column; gap: 16px; overflow-y: auto; flex: 1; }
+    .detail-view.active { display: flex; }
+    .back-btn { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); font-size: 13px; cursor: pointer; transition: color 0.2s; background: none; border: none; }
+    .back-btn:hover { color: var(--text-primary); }
+    .detail-header h2 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+    .detail-header p { font-size: 13px; color: var(--text-muted); }
+    .status-badge { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 12px; font-size: 13px; font-weight: 500; }
+    .status-badge.on { background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); color: var(--accent-green-light); }
+    .status-badge.off { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: var(--accent-red-light); }
+    .status-dot { width: 10px; height: 10px; border-radius: 50%; animation: pulse 2s infinite; }
+    .status-badge.on .status-dot { background: var(--accent-green); }
+    .status-badge.off .status-dot { background: var(--accent-red); }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    .info-grid { display: flex; flex-direction: column; gap: 8px; }
+    .info-row { display: flex; gap: 12px; padding: 12px; background: var(--bg-card); border-radius: 10px; }
+    .info-icon { font-size: 16px; flex-shrink: 0; }
+    .info-content { flex: 1; min-width: 0; }
+    .info-label { font-size: 11px; color: var(--text-muted); margin-bottom: 2px; }
+    .info-value { font-size: 13px; color: var(--text-secondary); word-break: break-word; }
+    .sidebar-footer { padding: 12px 16px; border-top: 1px solid var(--border-color); text-align: center; background: var(--bg-secondary); }
+    .sidebar-footer p { font-size: 11px; color: var(--text-muted); }
+    .legend { position: fixed; bottom: 16px; left: 16px; background: var(--bg-secondary); backdrop-filter: blur(10px); border-radius: 12px; border: 1px solid var(--border-color); padding: 12px 16px; z-index: 1000; }
+    .legend-title { font-size: 11px; font-weight: 600; color: var(--text-secondary); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .legend-section { margin-bottom: 10px; }
+    .legend-section:last-child { margin-bottom: 0; }
+    .legend-section-title { font-size: 10px; color: var(--text-muted); margin-bottom: 6px; }
+    .legend-items { display: flex; flex-direction: column; gap: 6px; }
+    .legend-item { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); font-size: 12px; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .legend-dot.green { background: var(--accent-green); }
+    .legend-dot.red { background: var(--accent-red); }
+    .legend-rect { width: 20px; height: 12px; border-radius: 3px; opacity: 0.7; }
+    .legend-rect.yellow { background: #facc15; }
+    .legend-rect.orange { background: #f97316; }
+    .legend-rect.blue { background: #3b82f6; }
+    .toggle-btn { display: none; position: fixed; bottom: 16px; right: 16px; width: 56px; height: 56px; background: var(--accent-blue); border-radius: 50%; border: none; color: white; z-index: 1002; box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4); cursor: pointer; }
+    .empty-state { padding: 48px 16px; text-align: center; color: var(--text-muted); }
+    .empty-state .icon { font-size: 40px; margin-bottom: 8px; }
+    .leaflet-popup-content-wrapper { background: var(--bg-card-hover); border-radius: 12px; box-shadow: 0 10px 40px var(--shadow-color); }
+    .leaflet-popup-content { margin: 12px; color: var(--text-primary); font-family: 'Inter', sans-serif; }
+    .leaflet-popup-tip { background: var(--bg-card-hover); }
+    .leaflet-container { background: var(--bg-primary); }
+    .popup-title { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+    .popup-district { font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; }
+    .popup-status { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+    .popup-status.on { background: rgba(34, 197, 94, 0.15); color: var(--accent-green-light); }
+    .popup-status.off { background: rgba(239, 68, 68, 0.15); color: var(--accent-red-light); }
+    .popup-status span { width: 6px; height: 6px; border-radius: 50%; }
+    .popup-status.on span { background: var(--accent-green); }
+    .popup-status.off span { background: var(--accent-red); }
+    .data-source { position: fixed; top: 70px; left: 16px; background: var(--bg-secondary); backdrop-filter: blur(10px); border-radius: 8px; border: 1px solid var(--border-color); padding: 8px 12px; z-index: 1000; font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
+    .data-source .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-green); animation: pulse 2s infinite; }
+    .district-label { background: transparent !important; border: none !important; box-shadow: none !important; font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; color: var(--text-primary); text-shadow: 0 1px 3px rgba(0,0,0,0.8), 0 0 10px rgba(0,0,0,0.5); white-space: nowrap; }
+    @media (max-width: 768px) { .sidebar { width: 100%; } .toggle-btn { display: flex; align-items: center; justify-content: center; } .theme-toggle { right: 16px; top: auto; bottom: 80px; } }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+      </div>
+      <div class="header-text">
+        <h1>РћРїРµСЂР°С‚РёРІРЅР° РєР°СЂС‚Р° Р—РћР—</h1>
+        <p>РћРґРµСЃСЊРєР° РѕР±Р»Р°СЃС‚СЊ вЂў 13.12.2025</p>
+      </div>
+    </div>
+  </header>
+  <div class="theme-toggle" id="themeToggle">
+    <button id="darkBtn" class="active" onclick="setTheme('dark')" title="РўРµРјРЅР° С‚РµРјР°">
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+    </button>
+    <button id="lightBtn" onclick="setTheme('light')" title="РЎРІС–С‚Р»Р° С‚РµРјР°">
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+    </button>
+  </div>
+  <div class="data-source" id="dataSource"><div class="dot"></div><span>Р›РѕРєР°Р»СЊРЅС– РґР°РЅС–</span></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab('districts')">Р Р°Р№РѕРЅРё</div>
+        <div class="tab" onclick="switchTab('facilities')">Р—Р°РєР»Р°РґРё</div>
+      </div>
+    </div>
+    <div class="tab-content active" id="tabDistricts">
+      <div class="district-overview" id="districtOverview"></div>
+    </div>
+    <div class="tab-content" id="tabFacilities">
+      <div class="stats-grid">
+        <div class="stat-card active" id="statAll" onclick="setFilter('all')"><div class="stat-number" id="totalCount">0</div><div class="stat-label">Р’СЃСЊРѕРіРѕ</div></div>
+        <div class="stat-card" id="statOn" onclick="setFilter('on')"><div class="stat-number green" id="onCount">0</div><div class="stat-label">Р—С– СЃРІС–С‚Р»РѕРј</div></div>
+        <div class="stat-card" id="statOff" onclick="setFilter('off')"><div class="stat-number red" id="offCount">0</div><div class="stat-label">Р‘РµР· СЃРІС–С‚Р»Р°</div></div>
+      </div>
+      <div class="filters">
+        <div class="search-box">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+          <input type="text" id="searchInput" placeholder="РџРѕС€СѓРє Р·Р°РєР»Р°РґСѓ..." oninput="filterFacilities()">
+        </div>
+        <select id="districtSelect" onchange="filterFacilities()"><option value="">Р’СЃС– СЂР°Р№РѕРЅРё</option></select>
+      </div>
+      <div class="facility-list" id="facilityList"></div>
+      <div class="detail-view" id="detailView">
+        <button class="back-btn" onclick="hideDetail()">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+          РќР°Р·Р°Рґ РґРѕ СЃРїРёСЃРєСѓ
+        </button>
+        <div class="detail-header"><h2 id="detailName"></h2><p id="detailFullName"></p></div>
+        <div id="detailStatus"></div>
+        <div class="info-grid" id="detailInfo"></div>
+      </div>
+    </div>
+    <div class="sidebar-footer"><p>Р”Р°РЅС– СЃС‚Р°РЅРѕРј РЅР° 13.12.2025 вЂў РљРќРџ "РћРћРљР›" РћР”Рђ</p></div>
+  </aside>
+  <div class="legend">
+    <div class="legend-title">РЈРјРѕРІРЅС– РїРѕР·РЅР°С‡РµРЅРЅСЏ</div>
+    <div class="legend-section">
+      <div class="legend-section-title">Р Р°Р№РѕРЅРё (РµР»РµРєС‚СЂРѕРїРѕСЃС‚Р°С‡Р°РЅРЅСЏ)</div>
+      <div class="legend-items">
+        <div class="legend-item"><div class="legend-rect yellow"></div><span>Р„ СЃРІС–С‚Р»Рѕ</span></div>
+        <div class="legend-item"><div class="legend-rect orange"></div><span>Р§Р°СЃС‚РєРѕРІРѕ</span></div>
+        <div class="legend-item"><div class="legend-rect blue"></div><span>РќРµРјР°С” СЃРІС–С‚Р»Р°</span></div>
+      </div>
+    </div>
+    <div class="legend-section">
+      <div class="legend-section-title">Р—Р°РєР»Р°РґРё</div>
+      <div class="legend-items">
+        <div class="legend-item"><div class="legend-dot green"></div><span>Р—С– СЃРІС–С‚Р»РѕРј</span></div>
+        <div class="legend-item"><div class="legend-dot red"></div><span>Р‘РµР· СЃРІС–С‚Р»Р°</span></div>
+      </div>
+    </div>
+  </div>
+  <button class="toggle-btn" id="toggleBtn" onclick="toggleSidebar()">
+    <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+  </button>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const CONFIG = { USE_GOOGLE_SHEETS: false, GOOGLE_SHEETS_URL: '', REFRESH_INTERVAL: 300000 };
+
+    // РЎРўРђРўРЈРЎ Р•Р›Р•РљРўР РћРџРћРЎРўРђР§РђРќРќРЇ Р РђР™РћРќР†Р’
+    const districtPowerStatus = {
+      'РћРґРµСЃСЊРєРёР№': 'partial',
+      'Р‘С–Р»РіРѕСЂРѕРґ-Р”РЅС–СЃС‚СЂРѕРІСЃСЊРєРёР№': 'yes',
+      'Р†Р·РјР°С—Р»СЊСЃСЊРєРёР№': 'no',
+      'Р‘РѕР»РіСЂР°РґСЃСЊРєРёР№': 'yes',
+      'Р РѕР·РґС–Р»СЊРЅСЏРЅСЃСЊРєРёР№': 'partial',
+      'РџРѕРґС–Р»СЊСЃСЊРєРёР№': 'partial',
+      'Р‘РµСЂРµР·С–РІСЃСЊРєРёР№': 'no'
+    };
+
+    const districtColors = { 'yes': '#facc15', 'partial': '#f97316', 'no': '#3b82f6' };
+    const districtStatusLabels = { 'yes': 'Р„ СЃРІС–С‚Р»Рѕ', 'partial': 'Р§Р°СЃС‚РєРѕРІРѕ', 'no': 'РќРµРјР°С” СЃРІС–С‚Р»Р°' };
+
+    // Р‘Р†Р›Р¬РЁ РўРћР§РќР† РњР•Р–Р† 7 Р РђР™РћРќР†Р’ РћР”Р•РЎР¬РљРћР‡ РћР‘Р›РђРЎРўР†
+    const districtPolygons = {
+      'РћРґРµСЃСЊРєРёР№': {
+        type: 'Polygon',
+        coordinates: [[
+          [29.65, 46.95], [29.75, 47.05], [29.90, 47.10], [30.10, 47.05], [30.25, 46.95],
+          [30.45, 46.90], [30.65, 46.85], [30.85, 46.75], [31.05, 46.65], [31.15, 46.50],
+          [31.10, 46.35], [31.00, 46.20], [30.85, 46.10], [30.70, 46.00], [30.55, 45.95],
+          [30.40, 46.00], [30.25, 46.05], [30.05, 46.15], [29.85, 46.25], [29.70, 46.40],
+          [29.60, 46.55], [29.55, 46.70], [29.60, 46.85], [29.65, 46.95]
+        ]]
+      },
+      'Р‘С–Р»РіРѕСЂРѕРґ-Р”РЅС–СЃС‚СЂРѕРІСЃСЊРєРёР№': {
+        type: 'Polygon',
+        coordinates: [[
+          [29.15, 46.35], [29.35, 46.40], [29.55, 46.35], [29.70, 46.25], [29.85, 46.15],
+          [30.05, 46.05], [30.25, 45.95], [30.40, 45.85], [30.45, 45.70], [30.35, 45.55],
+          [30.15, 45.45], [29.90, 45.40], [29.65, 45.45], [29.40, 45.55], [29.20, 45.70],
+          [29.05, 45.90], [29.00, 46.10], [29.05, 46.25], [29.15, 46.35]
+        ]]
+      },
+      'Р†Р·РјР°С—Р»СЊСЃСЊРєРёР№': {
+        type: 'Polygon',
+        coordinates: [[
+          [28.20, 45.75], [28.45, 45.80], [28.70, 45.75], [28.95, 45.65], [29.15, 45.55],
+          [29.35, 45.45], [29.50, 45.30], [29.55, 45.15], [29.45, 45.00], [29.25, 44.90],
+          [29.00, 44.85], [28.70, 44.90], [28.45, 45.00], [28.25, 45.15], [28.10, 45.35],
+          [28.05, 45.55], [28.10, 45.70], [28.20, 45.75]
+        ]]
+      },
+      'Р‘РѕР»РіСЂР°РґСЃСЊРєРёР№': {
+        type: 'Polygon',
+        coordinates: [[
+          [28.05, 46.30], [28.30, 46.40], [28.55, 46.35], [28.80, 46.25], [29.00, 46.10],
+          [29.10, 45.90], [29.10, 45.70], [28.95, 45.55], [28.70, 45.50], [28.45, 45.55],
+          [28.20, 45.65], [28.00, 45.80], [27.85, 46.00], [27.80, 46.15], [27.90, 46.25],
+          [28.05, 46.30]
+        ]]
+      },
+      'Р РѕР·РґС–Р»СЊРЅСЏРЅСЃСЊРєРёР№': {
+        type: 'Polygon',
+        coordinates: [[
+          [29.35, 47.40], [29.60, 47.45], [29.85, 47.40], [30.10, 47.30], [30.25, 47.15],
+          [30.35, 47.00], [30.30, 46.85], [30.15, 46.75], [29.95, 46.70], [29.75, 46.75],
+          [29.55, 46.85], [29.40, 47.00], [29.30, 47.15], [29.30, 47.30], [29.35, 47.40]
+        ]]
+      },
+      'РџРѕРґС–Р»СЊСЃСЊРєРёР№': {
+        type: 'Polygon',
+        coordinates: [[
+          [28.75, 48.20], [29.00, 48.25], [29.30, 48.20], [29.60, 48.10], [29.85, 47.95],
+          [30.05, 47.75], [30.15, 47.55], [30.20, 47.35], [30.15, 47.15], [30.00, 47.00],
+          [29.80, 46.90], [29.55, 46.90], [29.30, 47.00], [29.10, 47.15], [28.95, 47.35],
+          [28.85, 47.55], [28.75, 47.80], [28.70, 48.00], [28.75, 48.20]
+        ]]
+      },
+      'Р‘РµСЂРµР·С–РІСЃСЊРєРёР№': {
+        type: 'Polygon',
+        coordinates: [[
+          [30.20, 47.70], [30.45, 47.75], [30.70, 47.70], [30.95, 47.60], [31.15, 47.45],
+          [31.30, 47.25], [31.35, 47.05], [31.25, 46.85], [31.05, 46.70], [30.80, 46.65],
+          [30.55, 46.70], [30.35, 46.80], [30.20, 46.95], [30.10, 47.15], [30.05, 47.35],
+          [30.10, 47.55], [30.20, 47.70]
+        ]]
+      }
+    };
+
+    const districtInfo = {
+      'РћРґРµСЃСЊРєРёР№': { population: '1360.9 С‚РёСЃ.', center: [46.45, 30.45], zoom: 9, labelPos: [46.35, 30.55] },
+      'Р‘С–Р»РіРѕСЂРѕРґ-Р”РЅС–СЃС‚СЂРѕРІСЃСЊРєРёР№': { population: '201.4 С‚РёСЃ.', center: [45.90, 29.70], zoom: 10, labelPos: [45.85, 29.65] },
+      'Р†Р·РјР°С—Р»СЊСЃСЊРєРёР№': { population: '206.2 С‚РёСЃ.', center: [45.25, 28.85], zoom: 10, labelPos: [45.20, 28.85] },
+      'Р‘РѕР»РіСЂР°РґСЃСЊРєРёР№': { population: '154.5 С‚РёСЃ.', center: [45.95, 28.45], zoom: 10, labelPos: [45.95, 28.40] },
+      'Р РѕР·РґС–Р»СЊРЅСЏРЅСЃСЊРєРёР№': { population: '104.2 С‚РёСЃ.', center: [47.05, 29.85], zoom: 10, labelPos: [47.05, 29.85] },
+      'РџРѕРґС–Р»СЊСЃСЊРєРёР№': { population: '229.9 С‚РёСЃ.', center: [47.60, 29.50], zoom: 9, labelPos: [47.55, 29.45] },
+      'Р‘РµСЂРµР·С–РІСЃСЊРєРёР№': { population: '123.3 С‚РёСЃ.', center: [47.15, 30.70], zoom: 10, labelPos: [47.15, 30.75] }
+    };
+
+    let facilitiesData = [
+      // РћР”Р•РЎР¬РљРР™ Р РђР™РћРќ
+      { id: 1, name: 'РљРќРџ "РћРґРµСЃСЊРєР° РѕР±Р»Р°СЃРЅР° РєР»С–РЅС–С‡РЅР° Р»С–РєР°СЂРЅСЏ"', shortName: 'РћР±Р»Р°СЃРЅР° РєР»С–РЅС–С‡РЅР° Р»С–РєР°СЂРЅСЏ', district: 'РћРґРµСЃСЊРєРёР№', type: 'РћР±Р»Р°СЃРЅРёР№ Р·Р°РєР»Р°Рґ', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, СЃРѕРЅСЏС‡РЅС– РїР°РЅРµР»С–, Р”Р‘Р–', fuelReserve: '7 РґС–Р±', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'РІР»Р°СЃРЅР° СЃРІРµСЂРґР»РѕРІРёРЅР°', waterReserve: '100000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РЅС–', contact: 'Р›СЏС€РµРЅРєРѕ РђСЂС‚РµРј Р’РѕР»РѕРґРёРјРёСЂРѕРІРёС‡ 0668035861', lat: 46.4775, lng: 30.7326 },
+      { id: 2, name: 'РљРќРџ "РћРґРµСЃСЊРєР° РѕР±Р»Р°СЃРЅР° РґРёС‚СЏС‡Р° РєР»С–РЅС–С‡РЅР° Р»С–РєР°СЂРЅСЏ"', shortName: 'РћР±Р»Р°СЃРЅР° РґРёС‚СЏС‡Р° Р»С–РєР°СЂРЅСЏ', district: 'РћРґРµСЃСЊРєРёР№', type: 'РћР±Р»Р°СЃРЅРёР№ Р·Р°РєР»Р°Рґ', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, СЃРѕРЅСЏС‡РЅС– РїР°РЅРµР»С–, Р”Р‘Р–', fuelReserve: '5 РґС–Р±', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', waterReserve: '90000 С‚РµС…РЅ. / 2700 РїРёС‚РЅР°', communication: 'Р„', damages: 'РЅС–', contact: 'Р§С–С…РІР°СЂС–СЏ РҐРІС–С‡Р° РћС‚Р°СЂРѕРІРёС‡ 0674838818', lat: 46.4695, lng: 30.7456 },
+      { id: 3, name: 'РљРќРџ "РћРґРµСЃСЊРєРёР№ РѕР±Р»Р°СЃРЅРёР№ РєР»С–РЅС–С‡РЅРёР№ РјРµРґРёС‡РЅРёР№ С†РµРЅС‚СЂ"', shortName: 'РћР±Р»Р°СЃРЅРёР№ РјРµРґ. С†РµРЅС‚СЂ', district: 'РћРґРµСЃСЊРєРёР№', type: 'РћР±Р»Р°СЃРЅРёР№ Р·Р°РєР»Р°Рґ', hasElectricity: false, alternativePower: 'РЎРѕРЅСЏС‡РЅС– Р±Р°С‚Р°СЂРµС—', fuelReserve: '20 РґС–Р±', heating: 'РІС–РґСЃСѓС‚РЅС”', water: 'РІС–РґСЃСѓС‚РЅС”', waterReserve: '5 Р»', communication: 'Р„', damages: 'РЅС–', contact: 'РўРєР°С‡ Р’.Рђ. 097 615 4722', lat: 46.4825, lng: 30.7216 },
+      { id: 4, name: 'РљРќРџ "Р‘Р°РіР°С‚РѕРїСЂРѕС„С–Р»СЊРЅРёР№ С€РїРёС‚Р°Р»СЊ РІРµС‚РµСЂР°РЅС–РІ"', shortName: 'РЁРїРёС‚Р°Р»СЊ РІРµС‚РµСЂР°РЅС–РІ', district: 'РћРґРµСЃСЊРєРёР№', type: 'РћР±Р»Р°СЃРЅРёР№ Р·Р°РєР»Р°Рґ', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, Р”Р‘Р–', fuelReserve: '5 РґС–Р±', heating: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ, РЅР°СЏРІРЅРµ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ, РЅР°СЏРІРЅРµ', waterReserve: '5000 С‚РµС…РЅ. / 1000 РїРёС‚РЅР°', communication: 'Р„', damages: 'РЅС–', contact: 'Р–СѓРєРѕРІР° Р†СЂРёРЅР° 0930690099', lat: 46.4655, lng: 30.7586 },
+      { id: 5, name: 'РљРќРџ "РћРґРµСЃСЊРєРёР№ РѕР±Р»Р°СЃРЅРёР№ С†РµРЅС‚СЂ СЃРѕС†С–Р°Р»СЊРЅРѕ Р·РЅР°С‡СѓС‰РёС… С…РІРѕСЂРѕР±"', shortName: 'Р¦РµРЅС‚СЂ СЃРѕС†. Р·РЅР°С‡СѓС‰РёС… С…РІРѕСЂРѕР±', district: 'РћРґРµСЃСЊРєРёР№', type: 'РћР±Р»Р°СЃРЅРёР№ Р·Р°РєР»Р°Рґ', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё', fuelReserve: '5 РґС–Р±', heating: 'С‡Р°СЃС‚РєРѕРІРµ', water: 'С‡Р°СЃС‚РєРѕРІРµ', waterReserve: '1000 Р»', communication: 'Р„', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'Р¤С–Р»Р°С‚РµРЅРєРѕРІР° РђРЅР°СЃС‚Р°СЃС–СЏ 0677428025', lat: 46.4545, lng: 30.7126 },
+      { id: 6, name: 'РљРќРџ "РћРґРµСЃСЊРєРёР№ РѕР±Р»Р°СЃРЅРёР№ С†РµРЅС‚СЂ РЅРµС„СЂРѕР»РѕРіС–С— С‚Р° РґС–Р°Р»С–Р·Сѓ"', shortName: 'Р¦РµРЅС‚СЂ РЅРµС„СЂРѕР»РѕРіС–С— С‚Р° РґС–Р°Р»С–Р·Сѓ', district: 'РћРґРµСЃСЊРєРёР№', type: 'РћР±Р»Р°СЃРЅРёР№ Р·Р°РєР»Р°Рґ', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё', fuelReserve: '20 РґС–Р±', heating: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ, РІС–РґСЃСѓС‚РЅС”', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ, РІС–РґСЃСѓС‚РЅС”', waterReserve: '6000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'Р‘Р»РѕС…С–РЅР° Рђ.РЎ 0983882000', lat: 46.4635, lng: 30.7406 },
+      { id: 7, name: 'РљРќРџ "РћРґРµСЃСЊРєРёР№ СЂРµРіС–РѕРЅР°Р»СЊРЅРёР№ РєР»С–РЅС–С‡РЅРёР№ РїСЂРѕС‚РёРїСѓС…Р»РёРЅРЅРёР№ С†РµРЅС‚СЂ"', shortName: 'РџСЂРѕС‚РёРїСѓС…Р»РёРЅРЅРёР№ С†РµРЅС‚СЂ', district: 'РћРґРµСЃСЊРєРёР№', type: 'РћР±Р»Р°СЃРЅРёР№ Р·Р°РєР»Р°Рґ', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё', fuelReserve: '5 РґС–Р±', heating: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ, РЅР°СЏРІРЅРµ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ, РЅРµРјР°С”', waterReserve: '8000 С‚РµС…РЅ. / 1000 РїРёС‚РЅР°', communication: 'РќР°СЏРІРЅРёР№', damages: 'РЅРµРјР°С”', contact: 'РЎС‚РµС„Р°РЅРѕРІ Р СѓСЃС‚Р°Рј 0503367576', lat: 46.4515, lng: 30.7256 },
+      { id: 8, name: 'РљРќРџ "РћРґРµСЃСЊРєР° РѕР±Р»Р°СЃРЅР° СЃС‚Р°РЅС†С–СЏ РїРµСЂРµР»РёРІР°РЅРЅСЏ РєСЂРѕРІС–"', shortName: 'РЎС‚Р°РЅС†С–СЏ РїРµСЂРµР»РёРІР°РЅРЅСЏ РєСЂРѕРІС–', district: 'РћРґРµСЃСЊРєРёР№', type: 'РћР±Р»Р°СЃРЅРёР№ Р·Р°РєР»Р°Рґ', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё (Р”Р“Рђ-100)', fuelReserve: '5 РґС–Р±', heating: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ, РЅР°СЏРІРЅРµ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ, РЅР°СЏРІРЅРµ', waterReserve: '4000 С‚РµС…РЅ. / 1000 РїРёС‚РЅР°', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РўРєР°С‡РµРЅРєРѕ РњР°СЂРёРЅР° 0979395274', lat: 46.4725, lng: 30.7176 },
+      { id: 16, name: 'РљРќРџ "РњС–СЃСЊРєР° РєР»С–РЅС–С‡РЅР° Р»С–РєР°СЂРЅСЏ в„– 10"', shortName: 'РњРљР› в„– 10', district: 'РћРґРµСЃСЊРєРёР№', type: 'РњС–СЃСЊРєР° Р»С–РєР°СЂРЅСЏ', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, Tesla', fuelReserve: '30% (РїРѕРїРѕРІРЅРµРЅРЅСЏ)', heating: 'РІС–РґСЃСѓС‚РЅС”', water: 'СЃРІРµСЂРґР»РѕРІРёРЅР°', waterReserve: 'РќРµРѕР±РјРµР¶РµРЅРёР№', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РЎРµСЂРіС–Р№ РћС€РѕРІСЃСЊРєРёР№ +380671655291', lat: 46.4255, lng: 30.7656 },
+      { id: 25, name: 'РљРќРџ "Р”РёС‚СЏС‡Р° РјС–СЃСЊРєР° РєР»С–РЅС–С‡РЅР° Р»С–РєР°СЂРЅСЏ в„– 3"', shortName: 'Р”РёС‚СЏС‡Р° РњРљР› в„– 3', district: 'РћРґРµСЃСЊРєРёР№', type: 'Р”РёС‚СЏС‡Р° Р»С–РєР°СЂРЅСЏ', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, СЃРѕРЅСЏС‡РЅС– РїР°РЅРµР»С–, Tesla, Р”Р‘Р–', fuelReserve: 'РџРѕСЃС‚С–Р№РЅРµ РїРѕРїРѕРІРЅРµРЅРЅСЏ', heating: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ, РЅР°СЏРІРЅРµ', water: 'С‡Р°СЃС‚РєРѕРІРµ', waterReserve: '16700 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'Р‘СѓСЂРµРіР° Р›СЋРґРјРёР»Р° 0964248612', lat: 46.3955, lng: 30.6956 },
+      { id: 26, name: 'РљРќРџ "РњС–СЃСЊРєР° РєР»С–РЅС–С‡РЅР° С–РЅС„РµРєС†С–Р№РЅР° Р»С–РєР°СЂРЅСЏ"', shortName: 'Р†РЅС„РµРєС†С–Р№РЅР° Р»С–РєР°СЂРЅСЏ', district: 'РћРґРµСЃСЊРєРёР№', type: 'РњС–СЃСЊРєР° Р»С–РєР°СЂРЅСЏ', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂ, СЃРѕРЅСЏС‡РЅС– РїР°РЅРµР»С–', fuelReserve: 'РћР±СЃР»СѓРіРѕРІСѓС” РњС–СЃСЊРєСЃРІС–С‚Р»Рѕ', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ РўР“Рћ', water: 'С”, РЅРёР·СЊРєРёР№ С‚РёСЃРє + СЃРІРµСЂРґР»РѕРІРёРЅР°', waterReserve: '6000 Р»', communication: 'Р„', damages: 'РЅРµРјР°С”', contact: 'Р›Р°РІСЂСЋРєРѕРІР° РЎРІС–С‚Р»Р°РЅР° 0503337959', lat: 46.4355, lng: 30.7556 },
+      { id: 28, name: 'РљРќРџ "Р”РёС‚СЏС‡Р° РјС–СЃСЊРєР° РїРѕР»С–РєР»С–РЅС–РєР° в„– 3"', shortName: 'Р”РёС‚СЏС‡Р° РїРѕР»С–РєР»С–РЅС–РєР° в„– 3', district: 'РћРґРµСЃСЊРєРёР№', type: 'РџРѕР»С–РєР»С–РЅС–РєР°', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂ, Р°РєСѓРјСѓР»СЏС‚РѕСЂРЅРёР№ РіРµРЅРµСЂР°С‚РѕСЂ', fuelReserve: '5 РґРЅС–РІ', heating: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ, С”', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ, С”', waterReserve: 'Р„', communication: 'Р„', damages: 'РЅС–', contact: 'РњР°СЂРјСѓСЃРµРІРёС‡ Р›Р°СЂРёСЃР° 0662548255', lat: 46.4455, lng: 30.7856 },
+      { id: 15, name: 'РљРќРџ "Р§РѕСЂРЅРѕРјРѕСЂСЃСЊРєР° Р»С–РєР°СЂРЅСЏ"', shortName: 'Р§РѕСЂРЅРѕРјРѕСЂСЃСЊРєР° Р»С–РєР°СЂРЅСЏ', district: 'РћРґРµСЃСЊРєРёР№', type: 'РњС–СЃСЊРєР° Р»С–РєР°СЂРЅСЏ', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё', fuelReserve: '7 РґС–Р±', heating: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', waterReserve: '25000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РђРЅРґСЂС”С”РІ Р®СЂС–Р№ 063 726 2404', lat: 46.3039, lng: 30.6553 },
+      { id: 20, name: 'РљРќРџ "РћРІС–РґС–РѕРїРѕР»СЊСЃСЊРєР° Р»С–РєР°СЂРЅСЏ"', shortName: 'РћРІС–РґС–РѕРїРѕР»СЊСЃСЊРєР° Р»С–РєР°СЂРЅСЏ', district: 'РћРґРµСЃСЊРєРёР№', type: 'РЎРµР»РёС‰РЅР° Р»С–РєР°СЂРЅСЏ', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, Р°РєСѓРјСѓР»СЏС‚РѕСЂРё', fuelReserve: '5-7 РґРЅС–РІ', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ (РіР°Р· + РґСЂРѕРІР°)', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', waterReserve: '3000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РЎР°Р»Р°С‚Р° РўРµС‚СЏРЅР° 0966148862', lat: 46.2500, lng: 30.4500 },
+      { id: 27, name: 'РљРќРџ "Р’РµР»РёРєРѕРґРѕР»РёРЅСЃСЊРєРёР№ РєРѕРЅСЃСѓР»СЊС‚Р°С‚РёРІРЅРѕ-РґС–Р°РіРЅРѕСЃС‚РёС‡РЅРёР№ С†РµРЅС‚СЂ"', shortName: 'Р’РµР»РёРєРѕРґРѕР»РёРЅСЃСЊРєРёР№ РљР”Р¦', district: 'РћРґРµСЃСЊРєРёР№', type: 'Р”С–Р°РіРЅРѕСЃС‚РёС‡РЅРёР№ С†РµРЅС‚СЂ', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё', fuelReserve: '5 РґС–Р±', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ (РІС–РґСЃСѓС‚РЅС”)', waterReserve: '26000 Р»', communication: 'РњРѕР±С–Р»СЊРЅРёР№', damages: 'РЅРµРјР°С”', contact: 'Р‘С”Р»С”РјСѓРє РћР»РµРЅР° 0972859399', lat: 46.3667, lng: 30.5833 },
+      { id: 29, name: 'РљРќРџ "Р“СЂРёР±С–РІСЃСЊРєР° Р°РјР±СѓР»Р°С‚РѕСЂС–СЏ Р—РџРЎРњ"', shortName: 'Р“СЂРёР±С–РІСЃСЊРєР° Р°РјР±СѓР»Р°С‚РѕСЂС–СЏ', district: 'РћРґРµСЃСЊРєРёР№', type: 'РђРјР±СѓР»Р°С‚РѕСЂС–СЏ', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё', fuelReserve: '5 РґРЅС–РІ', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'РєРѕРјСѓРЅР°Р»СЊРЅР° СЃРІРµСЂРґР»РѕРІРёРЅР°', waterReserve: '2000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РџР»РѕС…РѕС‚РЅСЋРє РџР°РІР»Рѕ +380679372845', lat: 46.3333, lng: 30.4667 },
+      { id: 32, name: 'РљРќРџ "РўРµРїР»РѕРґР°СЂСЃСЊРєРёР№ С†РµРЅС‚СЂ РџРњРЎР”"', shortName: 'РўРµРїР»РѕРґР°СЂСЃСЊРєРёР№ Р¦РџРњРЎР”', district: 'РћРґРµСЃСЊРєРёР№', type: 'Р¦РџРњРЎР”', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё', fuelReserve: '5 РґС–Р±', heating: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ (РЅС–)', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ (С‚Р°Рє)', waterReserve: '760 Р»', communication: 'Р„', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'Р¦РёРјР±Р°Р»СЋРє РћРєСЃР°РЅР° 0974962775', lat: 46.5000, lng: 30.3333 },
+      { id: 33, name: 'РљРќРџ "Р¦РџРњРЎР” РЇСЃСЊРєС–РІСЃСЊРєРѕС— СЃС–Р»СЊСЃСЊРєРѕС— СЂР°РґРё"', shortName: 'РЇСЃСЊРєС–РІСЃСЊРєРёР№ Р¦РџРњРЎР”', district: 'РћРґРµСЃСЊРєРёР№', type: 'Р¦РџРњРЎР”', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, СЃРѕРЅСЏС‡РЅС– РїР°РЅРµР»С–', fuelReserve: '5 РґС–Р±', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'РЅР°СЏРІРЅРµ', waterReserve: '2000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РљСѓСЂРєРѕ Р”РµРЅРёСЃ 0960932774', lat: 46.6000, lng: 30.2500 },
+      { id: 34, name: 'РљРќРџ "РћРІС–РґС–РѕРїРѕР»СЊСЃСЊРєРёР№ С†РµРЅС‚СЂ РџРњРЎР”"', shortName: 'РћРІС–РґС–РѕРїРѕР»СЊСЃСЊРєРёР№ Р¦РџРњРЎР”', district: 'РћРґРµСЃСЊРєРёР№', type: 'Р¦РџРњРЎР”', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё', fuelReserve: '5 РґС–Р±', heating: 'РєРѕС‚РµР»СЊРЅСЏ', water: 'РЅР°СЏРІРЅРµ', waterReserve: '300 Р»', communication: 'Р„', damages: 'РЅС–', contact: 'РљР°Р±Р°Р»СЊСЃСЊРєР° РћРєСЃР°РЅР°', lat: 46.2667, lng: 30.4333 },
+      // Р‘Р†Р›Р“РћР РћР”-Р”РќР†РЎРўР РћР’РЎР¬РљРР™ Р РђР™РћРќ
+      { id: 11, name: 'РљРќРџ "Р‘С–Р»РіРѕСЂРѕРґ-Р”РЅС–СЃС‚СЂРѕРІСЃСЊРєР° РјС–СЃСЊРєР° Р±Р°РіР°С‚РѕРїСЂРѕС„С–Р»СЊРЅР° Р»С–РєР°СЂРЅСЏ"', shortName: 'Р‘-Р”РЅС–СЃС‚СЂРѕРІСЃСЊРєР° РјС–СЃСЊРєР° Р»С–РєР°СЂРЅСЏ', district: 'Р‘С–Р»РіРѕСЂРѕРґ-Р”РЅС–СЃС‚СЂРѕРІСЃСЊРєРёР№', type: 'РњС–СЃСЊРєР° Р»С–РєР°СЂРЅСЏ', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, Р°РєСѓРјСѓР»СЏС‚РѕСЂРё, Р”Р‘Р–', fuelReserve: '7 РґС–Р±', heating: 'С†РµРЅС‚СЂР°Р»СЊРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', waterReserve: '18000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'Р–РЅСЏРєС–РЅ Р’С–С‚Р°Р»С–Р№ 0977226393', lat: 46.1958, lng: 30.3461 },
+      { id: 30, name: 'РљРќРџ "РўР°С‚Р°СЂР±СѓРЅР°СЂСЃСЊРєРёР№ СЂР°Р№РѕРЅРЅРёР№ С†РµРЅС‚СЂ РџРњРЎР”"', shortName: 'РўР°С‚Р°СЂР±СѓРЅР°СЂСЃСЊРєРёР№ Р¦РџРњРЎР”', district: 'Р‘С–Р»РіРѕСЂРѕРґ-Р”РЅС–СЃС‚СЂРѕРІСЃСЊРєРёР№', type: 'Р¦РџРњРЎР”', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, СЃРѕРЅСЏС‡РЅС– РїР°РЅРµР»С–', fuelReserve: '7 РґС–Р±', heating: 'РјС–СЃС†РµРІС– РєРѕС‚РµР»СЊРЅС–', water: 'РЅР°СЏРІРЅРµ', waterReserve: '5 РґРЅС–РІ', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РЎС‚РѕРіРЅС–Р№ РЎ.Р’. 0962601962', lat: 45.8500, lng: 29.6167 },
+      { id: 31, name: 'РљРџ "РЎР°СЂР°С‚СЃСЊРєРёР№ С†РµРЅС‚СЂ РџРњРЎР”"', shortName: 'РЎР°СЂР°С‚СЃСЊРєРёР№ Р¦РџРњРЎР”', district: 'Р‘С–Р»РіРѕСЂРѕРґ-Р”РЅС–СЃС‚СЂРѕРІСЃСЊРєРёР№', type: 'Р¦РџРњРЎР”', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё', fuelReserve: '10 РґРЅС–РІ', heating: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', waterReserve: '2 РґРЅС–', communication: 'РќР°СЏРІРЅРёР№', damages: 'РЅС–', contact: 'Р“СЂРёР±РµРЅРєРѕ РЎРµСЂРіС–Р№ 0971896450', lat: 46.0167, lng: 29.6667 },
+      // Р†Р—РњРђР‡Р›Р¬РЎР¬РљРР™ Р РђР™РћРќ
+      { id: 12, name: 'РљРќРџ "РљС–Р»С–Р№СЃСЊРєР° Р±Р°РіР°С‚РѕРїСЂРѕС„С–Р»СЊРЅР° Р»С–РєР°СЂРЅСЏ"', shortName: 'РљС–Р»С–Р№СЃСЊРєР° Р»С–РєР°СЂРЅСЏ', district: 'Р†Р·РјР°С—Р»СЊСЃСЊРєРёР№', type: 'РњС–СЃСЊРєР° Р»С–РєР°СЂРЅСЏ', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂ', fuelReserve: '7 РґС–Р±', heating: 'Р°РІС‚РѕРЅРѕРјРЅРµ (РІСѓРіС–Р»СЊРЅС– РєРѕС‚Р»Рё)', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ + СЂРµР·РµСЂРІ', waterReserve: '41000 Р»', communication: 'РњРѕР±С–Р»СЊРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: "Р–СѓСЂ'СЏРЅ Р’Р°СЃРёР»С–Р№ 0972174231", lat: 45.4422, lng: 29.2672 },
+      // Р‘РћР›Р“Р РђР”РЎР¬РљРР™ Р РђР™РћРќ - Р’РРџР РђР’Р›Р•РќР† РљРћРћР Р”РРќРђРўР
+      { id: 23, name: 'РљРќРџ "Р‘РµСЃСЃР°СЂР°Р±СЃСЊРєР° Р±Р°РіР°С‚РѕРїСЂРѕС„С–Р»СЊРЅР° Р»С–РєР°СЂРЅСЏ"', shortName: 'Р‘РµСЃСЃР°СЂР°Р±СЃСЊРєР° Р»С–РєР°СЂРЅСЏ', district: 'Р‘РѕР»РіСЂР°РґСЃСЊРєРёР№', type: 'РЎРµР»РёС‰РЅР° Р»С–РєР°СЂРЅСЏ', hasElectricity: true, alternativePower: 'Р”РёР·РµР»СЊ-РіРµРЅРµСЂР°С‚РѕСЂ', fuelReserve: '7 РґС–Р±', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', waterReserve: '3000 Р»', communication: 'РќРµ РїРѕСЂСѓС€РµРЅРёР№', damages: 'РЅРµРјР°С”', contact: 'Р РѕС‚Р°СЂ РЎ.Р†. 0982674276', lat: 46.1865, lng: 29.1501 },
+      // Р РћР—Р”Р†Р›Р¬РќРЇРќРЎР¬РљРР™ Р РђР™РћРќ
+      { id: 14, name: 'РљРќРџ "Р РѕР·РґС–Р»СЊРЅСЏРЅСЃСЊРєР° Р±Р°РіР°С‚РѕРїСЂРѕС„С–Р»СЊРЅР° Р»С–РєР°СЂРЅСЏ"', shortName: 'Р РѕР·РґС–Р»СЊРЅСЏРЅСЃСЊРєР° Р»С–РєР°СЂРЅСЏ', district: 'Р РѕР·РґС–Р»СЊРЅСЏРЅСЃСЊРєРёР№', type: 'РњС–СЃСЊРєР° Р»С–РєР°СЂРЅСЏ', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, СЃРѕРЅСЏС‡РЅС– РїР°РЅРµР»С–', fuelReserve: '7 РґС–Р±', heating: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ, РЅР°СЏРІРЅРµ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ + СЃРІРµСЂРґР»РѕРІРёРЅР°', waterReserve: '6000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РћСЃРёРїРѕРІ Р’.Рћ. 0669244340', lat: 46.8461, lng: 30.0828 },
+      { id: 17, name: 'РљРќРџ "Р—Р°С…Р°СЂС–РІСЃСЊРєР° Р±Р°РіР°С‚РѕРїСЂРѕС„С–Р»СЊРЅР° Р»С–РєР°СЂРЅСЏ"', shortName: 'Р—Р°С…Р°СЂС–РІСЃСЊРєР° Р»С–РєР°СЂРЅСЏ', district: 'Р РѕР·РґС–Р»СЊРЅСЏРЅСЃСЊРєРёР№', type: 'РЎС–Р»СЊСЃСЊРєР° Р»С–РєР°СЂРЅСЏ', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, СЃРѕРЅСЏС‡РЅС– РїР°РЅРµР»С–', fuelReserve: '7 РґС–Р±', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', waterReserve: '5000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'Р“Р°РЅР·С–Р№ Рђ.Рњ 0507247345', lat: 47.1167, lng: 30.0833 },
+      { id: 37, name: 'РљРќРџ "Р¦РµР±СЂРёРєС–РІСЃСЊРєРёР№ С†РµРЅС‚СЂ РџРњРЎР”"', shortName: 'Р¦РµР±СЂРёРєС–РІСЃСЊРєРёР№ Р¦РџРњРЎР”', district: 'Р РѕР·РґС–Р»СЊРЅСЏРЅСЃСЊРєРёР№', type: 'Р¦РџРњРЎР”', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё (1 Р· 2)', fuelReserve: '7 РґРЅС–РІ', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ (РіР°Р·)', water: 'РІР»Р°СЃРЅР° СЃРІРµСЂРґР»РѕРІРёРЅР°', waterReserve: 'Р„', communication: 'Р„', damages: 'РЅС–', contact: 'РџР»Р°С‚РѕРЅРѕРІР° Р›.Р’. 0967459159', lat: 47.0500, lng: 30.0667 },
+      { id: 38, name: 'РљРќРџ "Р—Р°С…Р°СЂС–РІСЃСЊРєРёР№ С†РµРЅС‚СЂ РџРњРЎР”"', shortName: 'Р—Р°С…Р°СЂС–РІСЃСЊРєРёР№ Р¦РџРњРЎР”', district: 'Р РѕР·РґС–Р»СЊРЅСЏРЅСЃСЊРєРёР№', type: 'Р¦РџРњРЎР”', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂ, СЃРѕРЅСЏС‡РЅС– РїР°РЅРµР»С– 7 РєР’С‚', fuelReserve: '5 РґРЅС–РІ', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', waterReserve: '400 Р»', communication: 'Р„', damages: 'РЅС–', contact: '', lat: 47.1250, lng: 30.0750 },
+      { id: 39, name: 'РљРќРџ "Р”РёРІС–Р·С–Р№СЃСЊРєРёР№ С†РµРЅС‚СЂ РџРњРЎР”"', shortName: 'Р”РёРІС–Р·С–Р№СЃСЊРєРёР№ Р¦РџРњРЎР”', district: 'Р РѕР·РґС–Р»СЊРЅСЏРЅСЃСЊРєРёР№', type: 'Р¦РџРњРЎР”', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё', fuelReserve: '10 РґРЅС–РІ', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'РЅР°СЏРІРЅРµ', waterReserve: '20 РґС–Р±', communication: 'Р„', damages: 'РЅС–', contact: 'Р‘Р°РєСѓРјРµРЅРєРѕ Р›. 0682726947', lat: 46.9000, lng: 30.0167 },
+      // РџРћР”Р†Р›Р¬РЎР¬РљРР™ Р РђР™РћРќ
+      { id: 9, name: 'РљРџ "Р‘Р°Р»С‚СЃСЊРєР° Р±Р°РіР°С‚РѕРїСЂРѕС„С–Р»СЊРЅР° Р»С–РєР°СЂРЅСЏ"', shortName: 'Р‘Р°Р»С‚СЃСЊРєР° Р»С–РєР°СЂРЅСЏ', district: 'РџРѕРґС–Р»СЊСЃСЊРєРёР№', type: 'РњС–СЃСЊРєР° Р»С–РєР°СЂРЅСЏ', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, СЃРѕРЅСЏС‡РЅР° СЃС‚Р°РЅС†С–СЏ, Р”Р‘Р–', fuelReserve: '10 РґС–Р±', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'СЃРІРµСЂРґР»РѕРІРёРЅР°', waterReserve: '20000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РљР°С†РјР°Р·Р° Р РѕРјР°РЅ 0952284517', lat: 47.9361, lng: 29.6233 },
+      { id: 13, name: 'РљРќРџ "РџРѕРґС–Р»СЊСЃСЊРєР° РјС–СЃСЊРєР° Р»С–РєР°СЂРЅСЏ"', shortName: 'РџРѕРґС–Р»СЊСЃСЊРєР° Р»С–РєР°СЂРЅСЏ', district: 'РџРѕРґС–Р»СЊСЃСЊРєРёР№', type: 'РњС–СЃСЊРєР° Р»С–РєР°СЂРЅСЏ', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, СЃРѕРЅСЏС‡РЅС– РїР°РЅРµР»С–, Р°РєСѓРјСѓР»СЏС‚РѕСЂРё', fuelReserve: '7 РґС–Р±', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', waterReserve: '6000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'Р›С–С‚СЏРЅСЃСЊРєРёР№ Р”РјРёС‚СЂРѕ 0984842595', lat: 47.7494, lng: 29.5300 },
+      { id: 18, name: 'РљРќРџ "Р›СЋР±Р°С€С–РІСЃСЊРєР° Р±Р°РіР°С‚РѕРїСЂРѕС„С–Р»СЊРЅР° Р»С–РєР°СЂРЅСЏ"', shortName: 'Р›СЋР±Р°С€С–РІСЃСЊРєР° Р»С–РєР°СЂРЅСЏ', district: 'РџРѕРґС–Р»СЊСЃСЊРєРёР№', type: 'РЎС–Р»СЊСЃСЊРєР° Р»С–РєР°СЂРЅСЏ', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, СЃРѕРЅСЏС‡РЅС– РїР°РЅРµР»С–, Р°РєСѓРјСѓР»СЏС‚РѕСЂРё', fuelReserve: '7 РґС–Р±', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'РІР»Р°СЃРЅР° СЃРІРµСЂРґР»РѕРІРёРЅР°', waterReserve: '5000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'Р¤РѕРјС–РЅ Р”РјРёС‚СЂРѕ 0674896441', lat: 47.8389, lng: 30.2611 },
+      { id: 19, name: 'РљРќРџ "РљРѕРґРёРјСЃСЊРєР° Р»С–РєР°СЂРЅСЏ"', shortName: 'РљРѕРґРёРјСЃСЊРєР° Р»С–РєР°СЂРЅСЏ', district: 'РџРѕРґС–Р»СЊСЃСЊРєРёР№', type: 'РњС–СЃСЊРєР° Р»С–РєР°СЂРЅСЏ', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, СЃРѕРЅСЏС‡РЅС– РїР°РЅРµР»С–, Р”Р‘Р–', fuelReserve: '20 РґРЅС–РІ', heating: 'Р°Р»СЊС‚РµСЂРЅР°С‚РёРІРЅРµ', water: 'СЃРІРµСЂРґР»РѕРІРёРЅР° + С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', waterReserve: '5000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'Р’РѕР»РѕС€РёРЅР° Р›Р°СЂРёСЃР° 0967229937', lat: 48.1033, lng: 29.1208 },
+      { id: 21, name: 'РљРќРџ "Р¦Р Р› РџРѕРґС–Р»СЊСЃСЊРєРѕРіРѕ СЂР°Р№РѕРЅСѓ"', shortName: 'Р¦Р Р› РџРѕРґС–Р»СЊСЃСЊРєРѕРіРѕ СЂ-РЅСѓ', district: 'РџРѕРґС–Р»СЊСЃСЊРєРёР№', type: 'Р¦Р Р›', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё', fuelReserve: '20 РґРЅС–РІ', heating: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', waterReserve: '7000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РљР°С‡Р°РЅ Рћ.Рњ. 0953204308', lat: 47.4167, lng: 29.5500 },
+      { id: 22, name: 'РљРќРџ "РЎР°РІСЂР°РЅСЃСЊРєР° Р»С–РєР°СЂРЅСЏ"', shortName: 'РЎР°РІСЂР°РЅСЃСЊРєР° Р»С–РєР°СЂРЅСЏ', district: 'РџРѕРґС–Р»СЊСЃСЊРєРёР№', type: 'РЎРµР»РёС‰РЅР° Р»С–РєР°СЂРЅСЏ', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё', fuelReserve: '5 РґС–Р±', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ + СЃРІРµСЂРґР»РѕРІРёРЅР°', waterReserve: '1000 Р»', communication: 'РњРѕР±С–Р»СЊРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РўРєР°С‡ РЎС‚Р°РЅС–СЃР»Р°РІ 0679422414', lat: 48.1331, lng: 30.0836 },
+      { id: 35, name: 'РљРќРџ "Р¦РџРњРЎР” РљСѓСЏР»СЊРЅРёС†СЊРєРѕС— СЃС–Р»СЊСЃСЊРєРѕС— СЂР°РґРё"', shortName: 'РљСѓСЏР»СЊРЅРёС†СЊРєРёР№ Р¦РџРњРЎР”', district: 'РџРѕРґС–Р»СЊСЃСЊРєРёР№', type: 'Р¦РџРњРЎР”', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё', fuelReserve: '5 РґРЅС–РІ', heating: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ (РЅС–)', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ (С‚Р°Рє)', waterReserve: '2205 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РЎРµСЂРµРґРёРЅСЃСЊРєР° Рў.Р’. 0668838347', lat: 46.8333, lng: 30.3833 },
+      { id: 36, name: 'РљРќРџ "Р¦РџРњРЎР” РџРѕРґС–Р»СЊСЃСЊРєРѕС— РјС–СЃСЊРєРѕС— СЂР°РґРё"', shortName: 'РџРѕРґС–Р»СЊСЃСЊРєРёР№ Р¦РџРњРЎР”', district: 'РџРѕРґС–Р»СЊСЃСЊРєРёР№', type: 'Р¦РџРњРЎР”', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё', fuelReserve: '7 РґС–Р±', heating: 'РєРѕС‚РµР»СЊРЅСЏ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', waterReserve: '2000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РњРµРјРµР№ Р›.Рћ. 0957166223', lat: 47.7556, lng: 29.5389 },
+      // Р‘Р•Р Р•Р—Р†Р’РЎР¬РљРР™ Р РђР™РћРќ
+      { id: 10, name: 'РљРќРџ "Р‘РµСЂРµР·С–РІСЃСЊРєР° С†РµРЅС‚СЂР°Р»СЊРЅР° РјС–СЃСЊРєР° Р»С–РєР°СЂРЅСЏ"', shortName: 'Р‘РµСЂРµР·С–РІСЃСЊРєР° Р»С–РєР°СЂРЅСЏ', district: 'Р‘РµСЂРµР·С–РІСЃСЊРєРёР№', type: 'РњС–СЃСЊРєР° Р»С–РєР°СЂРЅСЏ', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂ, СЃРѕРЅСЏС‡РЅС– Р±Р°С‚Р°СЂРµС—', fuelReserve: '10 РґС–Р±', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'СЃРІРµСЂРґР»РѕРІРёРЅР°', waterReserve: '25000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РђР»РµР№РЅРѕРІ РћР»РµРєСЃР°РЅРґСЂ 0688730373', lat: 47.1914, lng: 30.9161 },
+      { id: 24, name: 'РљРќРџ "Р†РІР°РЅС–РІСЃСЊРєРёР№ РјРµРґРёС‡РЅРёР№ С†РµРЅС‚СЂ"', shortName: 'Р†РІР°РЅС–РІСЃСЊРєРёР№ РјРµРґ. С†РµРЅС‚СЂ', district: 'Р‘РµСЂРµР·С–РІСЃСЊРєРёР№', type: 'РЎРµР»РёС‰РЅРёР№ С†РµРЅС‚СЂ', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, Tesla', fuelReserve: '5 РґРЅС–РІ', heating: 'Р°Р»СЊС‚РµСЂРЅР°С‚РёРІРЅРµ', water: 'Р°Р»СЊС‚РµСЂРЅР°С‚РёРІРЅРµ', waterReserve: '8000 Р»', communication: 'Р„', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РњР°С†РєСѓР» Р“Р°Р»РёРЅР° 0505170002', lat: 47.2833, lng: 30.7167 }
+    ];
+    
+    let map, markers = [], districtLayers = [], districtLabels = [], currentFilter = 'all', selectedFacilityId = null, currentTheme = 'dark', tileLayer = null;
+    const tileLayers = { dark: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', light: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png' };
+    
+    function setTheme(theme) {
+      currentTheme = theme;
+      document.body.setAttribute('data-theme', theme);
+      document.getElementById('darkBtn').classList.toggle('active', theme === 'dark');
+      document.getElementById('lightBtn').classList.toggle('active', theme === 'light');
+      localStorage.setItem('mapTheme', theme);
+      if (tileLayer) map.removeLayer(tileLayer);
+      tileLayer = L.tileLayer(tileLayers[theme], { attribution: '&copy; OSM &copy; CARTO' }).addTo(map);
+      updateMarkers();
+    }
+    
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      if (tabName === 'districts') {
+        document.querySelectorAll('.tab')[0].classList.add('active');
+        document.getElementById('tabDistricts').classList.add('active');
+      } else {
+        document.querySelectorAll('.tab')[1].classList.add('active');
+        document.getElementById('tabFacilities').classList.add('active');
+      }
+    }
+    
+    function initMap() {
+      const savedTheme = localStorage.getItem('mapTheme') || 'dark';
+      document.body.setAttribute('data-theme', savedTheme);
+      currentTheme = savedTheme;
+      document.getElementById('darkBtn').classList.toggle('active', savedTheme === 'dark');
+      document.getElementById('lightBtn').classList.toggle('active', savedTheme === 'light');
+      map = L.map('map', { center: [46.4, 29.5], zoom: 7, zoomControl: false });
+      tileLayer = L.tileLayer(tileLayers[savedTheme], { attribution: '&copy; OSM &copy; CARTO' }).addTo(map);
+      L.control.zoom({ position: 'bottomright' }).addTo(map);
+      drawDistrictPolygons();
+      updateMarkers();
+      populateDistricts();
+      updateStats();
+      renderFacilityList();
+      renderDistrictOverview();
+      if (CONFIG.USE_GOOGLE_SHEETS) { loadFromGoogleSheets(); setInterval(loadFromGoogleSheets, CONFIG.REFRESH_INTERVAL); }
+    }
+    
+    function drawDistrictPolygons() {
+      districtLayers.forEach(l => map.removeLayer(l));
+      districtLabels.forEach(l => map.removeLayer(l));
+      districtLayers = [];
+      districtLabels = [];
+      
+      Object.keys(districtPolygons).forEach(districtName => {
+        const polygon = districtPolygons[districtName];
+        const status = districtPowerStatus[districtName];
+        const color = districtColors[status];
+        
+        const layer = L.geoJSON({
+          type: 'Feature',
+          properties: { name: districtName, status: status },
+          geometry: polygon
+        }, {
+          style: { fillColor: color, fillOpacity: 0.35, color: color, weight: 3, opacity: 0.9 }
+        });
+        
+        layer.on('click', () => {
+          document.getElementById('districtSelect').value = districtName;
+          filterFacilities();
+          switchTab('facilities');
+          const info = districtInfo[districtName];
+          if (info) map.flyTo(info.center, info.zoom, { duration: 0.8 });
+        });
+        layer.on('mouseover', (e) => { e.target.setStyle({ fillOpacity: 0.5, weight: 4 }); });
+        layer.on('mouseout', (e) => { e.target.setStyle({ fillOpacity: 0.35, weight: 3 }); });
+        layer.bindTooltip(`<strong>${districtName} СЂР°Р№РѕРЅ</strong><br>${districtStatusLabels[status]}<br>${districtInfo[districtName].population}`, {
+          permanent: false, direction: 'center', className: 'district-tooltip'
+        });
+        layer.addTo(map);
+        districtLayers.push(layer);
+        
+        // Р”РѕРґР°С”РјРѕ РїС–РґРїРёСЃ СЂР°Р№РѕРЅСѓ
+        const info = districtInfo[districtName];
+        if (info && info.labelPos) {
+          const label = L.marker(info.labelPos, {
+            icon: L.divIcon({
+              className: 'district-label',
+              html: `<div style="text-align:center;"><strong>${districtName}</strong></div>`,
+              iconSize: [120, 20],
+              iconAnchor: [60, 10]
+            })
+          });
+          label.addTo(map);
+          districtLabels.push(label);
+        }
+      });
+    }
+    
+    function renderDistrictOverview() {
+      const container = document.getElementById('districtOverview');
+      const districts = Object.keys(districtInfo).sort((a, b) => {
+        const order = { 'yes': 0, 'partial': 1, 'no': 2 };
+        return order[districtPowerStatus[a]] - order[districtPowerStatus[b]];
+      });
+      container.innerHTML = districts.map(d => {
+        const info = districtInfo[d];
+        const status = districtPowerStatus[d];
+        const facilities = facilitiesData.filter(f => f.district === d);
+        const withPower = facilities.filter(f => f.hasElectricity).length;
+        const statusClass = status === 'yes' ? 'power-yes' : status === 'partial' ? 'power-partial' : 'power-no';
+        return `<div class="district-card" onclick="zoomToDistrict('${d}')">
+          <div class="district-card-header">
+            <div class="district-card-name">${d}</div>
+            <div class="district-card-status ${statusClass}"><div class="dot"></div>${districtStatusLabels[status]}</div>
+          </div>
+          <div class="district-card-stats">
+            <span>рџ‘Ґ ${info.population}</span>
+            <span>рџЏҐ ${facilities.length} Р·Р°РєР»Р°РґС–РІ</span>
+            <span>вљЎ ${withPower}/${facilities.length}</span>
+          </div>
+        </div>`;
+      }).join('');
+    }
+    
+    function zoomToDistrict(districtName) {
+      const info = districtInfo[districtName];
+      if (info) {
+        map.flyTo(info.center, info.zoom, { duration: 0.8 });
+        document.getElementById('districtSelect').value = districtName;
+        filterFacilities();
+        switchTab('facilities');
+      }
+    }
+    
+    function createMarkerIcon(hasElectricity, isSelected = false) {
+      const color = hasElectricity ? '#22c55e' : '#ef4444';
+      const borderColor = isSelected ? '#fbbf24' : (currentTheme === 'dark' ? '#1e293b' : '#ffffff');
+      const size = isSelected ? 28 : 22;
+      return L.divIcon({
+        className: 'custom-marker',
+        html: `<div style="width:${size}px;height:${size}px;background:${color};border:3px solid ${borderColor};border-radius:50%;box-shadow:0 3px 12px rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center"><svg width="${size*0.5}px" height="${size*0.5}px" viewBox="0 0 24 24" fill="white">${hasElectricity?'<path d="M13 3L4 14h7l-2 7 9-11h-7l2-7z"/>':'<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill-opacity="0.3"/><line x1="4" y1="4" x2="20" y2="20" stroke="white" stroke-width="2"/>'}</svg></div>`,
+        iconSize: [size, size], iconAnchor: [size/2, size/2], popupAnchor: [0, -size/2]
+      });
+    }
+    
+    function updateMarkers() {
+      markers.forEach(m => map.removeLayer(m));
+      markers = [];
+      getFilteredFacilities().forEach(f => {
+        const marker = L.marker([f.lat, f.lng], { icon: createMarkerIcon(f.hasElectricity, selectedFacilityId === f.id) });
+        marker.bindPopup(`<div class="popup-title">${f.shortName}</div><div class="popup-district">${f.district} СЂР°Р№РѕРЅ</div><div class="popup-status ${f.hasElectricity?'on':'off'}"><span></span>${f.hasElectricity?'Р„ РµР»РµРєС‚СЂРѕРїРѕСЃС‚Р°С‡Р°РЅРЅСЏ':'Р‘РµР· РµР»РµРєС‚СЂРѕРїРѕСЃС‚Р°С‡Р°РЅРЅСЏ'}</div>`);
+        marker.on('click', () => showDetail(f.id));
+        marker.addTo(map);
+        markers.push(marker);
+      });
+    }
+    
+    function getFilteredFacilities() {
+      let result = [...facilitiesData];
+      if (currentFilter === 'on') result = result.filter(f => f.hasElectricity);
+      else if (currentFilter === 'off') result = result.filter(f => !f.hasElectricity);
+      const district = document.getElementById('districtSelect').value;
+      if (district) result = result.filter(f => f.district === district);
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      if (search) result = result.filter(f => f.name.toLowerCase().includes(search) || f.shortName.toLowerCase().includes(search) || f.district.toLowerCase().includes(search));
+      return result;
+    }
+    
+    function populateDistricts() {
+      const select = document.getElementById('districtSelect');
+      Object.keys(districtInfo).sort().forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d;
+        opt.textContent = `${d} (${districtInfo[d].population})`;
+        select.appendChild(opt);
+      });
+      select.addEventListener('change', () => {
+        if (select.value && districtInfo[select.value]) {
+          const info = districtInfo[select.value];
+          map.flyTo(info.center, info.zoom, { duration: 0.8 });
+        }
+      });
+    }
+    
+    function updateStats() {
+      const filtered = getFilteredFacilities();
+      document.getElementById('totalCount').textContent = filtered.length;
+      document.getElementById('onCount').textContent = filtered.filter(f => f.hasElectricity).length;
+      document.getElementById('offCount').textContent = filtered.filter(f => !f.hasElectricity).length;
+    }
+    
+    function setFilter(type) {
+      currentFilter = type;
+      document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active','active-green','active-red'));
+      if (type === 'all') document.getElementById('statAll').classList.add('active');
+      else if (type === 'on') document.getElementById('statOn').classList.add('active-green');
+      else document.getElementById('statOff').classList.add('active-red');
+      filterFacilities();
+    }
+    
+    function filterFacilities() { updateStats(); updateMarkers(); renderFacilityList(); }
+    
+    function renderFacilityList() {
+      const list = document.getElementById('facilityList');
+      const filtered = getFilteredFacilities();
+      if (!filtered.length) { list.innerHTML = '<div class="empty-state"><div class="icon">рџ”Ќ</div><div>Р—Р°РєР»Р°РґС–РІ РЅРµ Р·РЅР°Р№РґРµРЅРѕ</div></div>'; return; }
+      list.innerHTML = filtered.map(f => `<div class="facility-item" onclick="showDetail(${f.id})">
+        <div class="facility-status ${f.hasElectricity?'on':'off'}"></div>
+        <div class="facility-info">
+          <div class="facility-name">${f.shortName}</div>
+          <div class="facility-meta">${f.district} СЂР°Р№РѕРЅ вЂў ${f.type}</div>
+          <div class="facility-tags"><span>в›Ѕ ${f.fuelReserve}</span>${f.heating.includes('РєРѕС‚РµР»СЊРЅСЏ')?'<span class="heat">рџ”Ґ РєРѕС‚РµР»СЊРЅСЏ</span>':''}</div>
+        </div>
+        <svg class="facility-arrow" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </div>`).join('');
+    }
+    
+    function showDetail(id) {
+      const f = facilitiesData.find(x => x.id === id);
+      if (!f) return;
+      selectedFacilityId = id;
+      document.getElementById('facilityList').style.display = 'none';
+      document.getElementById('detailView').classList.add('active');
+      document.getElementById('detailName').textContent = f.shortName;
+      document.getElementById('detailFullName').textContent = f.name;
+      document.getElementById('detailStatus').innerHTML = `<div class="status-badge ${f.hasElectricity?'on':'off'}"><div class="status-dot"></div>${f.hasElectricity?'Р•Р»РµРєС‚СЂРѕРїРѕСЃС‚Р°С‡Р°РЅРЅСЏ РЅР°СЏРІРЅРµ':'Р•Р»РµРєС‚СЂРѕРїРѕСЃС‚Р°С‡Р°РЅРЅСЏ РІС–РґСЃСѓС‚РЅС”'}</div>`;
+      const rows = [['вљЎ','РђР»СЊС‚РµСЂРЅР°С‚РёРІРЅРµ Р¶РёРІР»РµРЅРЅСЏ',f.alternativePower],['в›Ѕ','Р—Р°РїР°СЃ РїР°Р»РёРІР°',f.fuelReserve],['рџ”Ґ','РўРµРїР»РѕРїРѕСЃС‚Р°С‡Р°РЅРЅСЏ',f.heating],['рџ’§','Р’РѕРґРѕРїРѕСЃС‚Р°С‡Р°РЅРЅСЏ',f.water],['рџљ°','Р—Р°РїР°СЃ РІРѕРґРё',f.waterReserve],['рџ“Ў','Р—РІ\'СЏР·РѕРє',f.communication],['рџ’Ґ','РџРѕС€РєРѕРґР¶РµРЅРЅСЏ',f.damages],['рџ“Ќ','Р Р°Р№РѕРЅ',f.district],['рџЏҐ','РўРёРї',f.type]];
+      if (f.contact) rows.push(['рџ“ћ','РљРѕРЅС‚Р°РєС‚',f.contact]);
+      document.getElementById('detailInfo').innerHTML = rows.map(r => `<div class="info-row"><div class="info-icon">${r[0]}</div><div class="info-content"><div class="info-label">${r[1]}</div><div class="info-value">${r[2]}</div></div></div>`).join('');
+      map.flyTo([f.lat, f.lng], 14, { duration: 0.8 });
+      updateMarkers();
+    }
+    
+    function hideDetail() { selectedFacilityId = null; document.getElementById('facilityList').style.display = 'block'; document.getElementById('detailView').classList.remove('active'); updateMarkers(); }
+    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('hidden'); }
+    
+    async function loadFromGoogleSheets() {
+      if (!CONFIG.GOOGLE_SHEETS_URL) return;
+      const ds = document.getElementById('dataSource');
+      ds.classList.add('loading');
+      ds.querySelector('span').textContent = 'Р—Р°РІР°РЅС‚Р°Р¶РµРЅРЅСЏ...';
+      try {
+        const res = await fetch(CONFIG.GOOGLE_SHEETS_URL);
+        const csv = await res.text();
+        const data = parseCSV(csv);
+        if (data.length) { facilitiesData = data; updateStats(); updateMarkers(); renderFacilityList(); renderDistrictOverview(); ds.classList.remove('loading','error'); ds.querySelector('span').textContent = 'Google Sheets'; }
+      } catch(e) { console.error(e); ds.classList.remove('loading'); ds.classList.add('error'); ds.querySelector('span').textContent = 'РџРѕРјРёР»РєР° Р·Р°РІР°РЅС‚Р°Р¶РµРЅРЅСЏ'; }
+    }
+    
+    function parseCSV(csv) {
+      const lines = csv.trim().split('\n');
+      return lines.slice(1).map((line, i) => {
+        const v = line.split(',');
+        return { id: i+1, name: v[0]||'', shortName: v[1]||v[0]||'', district: v[2]||'', type: v[3]||'', hasElectricity: v[4]?.toLowerCase()==='С‚Р°Рє'||v[4]?.toLowerCase()==='true', alternativePower: v[5]||'', fuelReserve: v[6]||'', heating: v[7]||'', water: v[8]||'', waterReserve: v[9]||'', communication: v[10]||'', damages: v[11]||'', contact: v[12]||'', lat: parseFloat(v[13])||46.5, lng: parseFloat(v[14])||30.0 };
+      }).filter(f => f.name && f.lat && f.lng);
+    }
+    
+    document.addEventListener('DOMContentLoaded', initMap);
+  </script>
+</body>
+</html>
