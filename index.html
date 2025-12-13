@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>РћРїРµСЂР°С‚РёРІРЅР° РєР°СЂС‚Р° Р—РћР— РћРґРµСЃСЊРєРѕС— РѕР±Р»Р°СЃС‚С– | 13.12.2025</title>
+  <title>Оперативна карта ЗОЗ Одеської області | 13.12.2025</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -173,25 +173,25 @@
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
       </div>
       <div class="header-text">
-        <h1>РћРїРµСЂР°С‚РёРІРЅР° РєР°СЂС‚Р° Р—РћР—</h1>
-        <p>РћРґРµСЃСЊРєР° РѕР±Р»Р°СЃС‚СЊ вЂў 13.12.2025</p>
+        <h1>Оперативна карта ЗОЗ</h1>
+        <p>Одеська область • 13.12.2025</p>
       </div>
     </div>
   </header>
   <div class="theme-toggle" id="themeToggle">
-    <button id="darkBtn" class="active" onclick="setTheme('dark')" title="РўРµРјРЅР° С‚РµРјР°">
+    <button id="darkBtn" class="active" onclick="setTheme('dark')" title="Темна тема">
       <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
     </button>
-    <button id="lightBtn" onclick="setTheme('light')" title="РЎРІС–С‚Р»Р° С‚РµРјР°">
+    <button id="lightBtn" onclick="setTheme('light')" title="Світла тема">
       <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
     </button>
   </div>
-  <div class="data-source" id="dataSource"><div class="dot"></div><span>Р›РѕРєР°Р»СЊРЅС– РґР°РЅС–</span></div>
+  <div class="data-source" id="dataSource"><div class="dot"></div><span>Локальні дані</span></div>
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="tabs">
-        <div class="tab active" onclick="switchTab('districts')">Р Р°Р№РѕРЅРё</div>
-        <div class="tab" onclick="switchTab('facilities')">Р—Р°РєР»Р°РґРё</div>
+        <div class="tab active" onclick="switchTab('districts')">Райони</div>
+        <div class="tab" onclick="switchTab('facilities')">Заклади</div>
       </div>
     </div>
     <div class="tab-content active" id="tabDistricts">
@@ -199,45 +199,45 @@
     </div>
     <div class="tab-content" id="tabFacilities">
       <div class="stats-grid">
-        <div class="stat-card active" id="statAll" onclick="setFilter('all')"><div class="stat-number" id="totalCount">0</div><div class="stat-label">Р’СЃСЊРѕРіРѕ</div></div>
-        <div class="stat-card" id="statOn" onclick="setFilter('on')"><div class="stat-number green" id="onCount">0</div><div class="stat-label">Р—С– СЃРІС–С‚Р»РѕРј</div></div>
-        <div class="stat-card" id="statOff" onclick="setFilter('off')"><div class="stat-number red" id="offCount">0</div><div class="stat-label">Р‘РµР· СЃРІС–С‚Р»Р°</div></div>
+        <div class="stat-card active" id="statAll" onclick="setFilter('all')"><div class="stat-number" id="totalCount">0</div><div class="stat-label">Всього</div></div>
+        <div class="stat-card" id="statOn" onclick="setFilter('on')"><div class="stat-number green" id="onCount">0</div><div class="stat-label">Зі світлом</div></div>
+        <div class="stat-card" id="statOff" onclick="setFilter('off')"><div class="stat-number red" id="offCount">0</div><div class="stat-label">Без світла</div></div>
       </div>
       <div class="filters">
         <div class="search-box">
           <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-          <input type="text" id="searchInput" placeholder="РџРѕС€СѓРє Р·Р°РєР»Р°РґСѓ..." oninput="filterFacilities()">
+          <input type="text" id="searchInput" placeholder="Пошук закладу..." oninput="filterFacilities()">
         </div>
-        <select id="districtSelect" onchange="filterFacilities()"><option value="">Р’СЃС– СЂР°Р№РѕРЅРё</option></select>
+        <select id="districtSelect" onchange="filterFacilities()"><option value="">Всі райони</option></select>
       </div>
       <div class="facility-list" id="facilityList"></div>
       <div class="detail-view" id="detailView">
         <button class="back-btn" onclick="hideDetail()">
           <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-          РќР°Р·Р°Рґ РґРѕ СЃРїРёСЃРєСѓ
+          Назад до списку
         </button>
         <div class="detail-header"><h2 id="detailName"></h2><p id="detailFullName"></p></div>
         <div id="detailStatus"></div>
         <div class="info-grid" id="detailInfo"></div>
       </div>
     </div>
-    <div class="sidebar-footer"><p>Р”Р°РЅС– СЃС‚Р°РЅРѕРј РЅР° 13.12.2025 вЂў РљРќРџ "РћРћРљР›" РћР”Рђ</p></div>
+    <div class="sidebar-footer"><p>Дані станом на 13.12.2025 • КНП "ООКЛ" ОДА</p></div>
   </aside>
   <div class="legend">
-    <div class="legend-title">РЈРјРѕРІРЅС– РїРѕР·РЅР°С‡РµРЅРЅСЏ</div>
+    <div class="legend-title">Умовні позначення</div>
     <div class="legend-section">
-      <div class="legend-section-title">Р Р°Р№РѕРЅРё (РµР»РµРєС‚СЂРѕРїРѕСЃС‚Р°С‡Р°РЅРЅСЏ)</div>
+      <div class="legend-section-title">Райони (електропостачання)</div>
       <div class="legend-items">
-        <div class="legend-item"><div class="legend-rect yellow"></div><span>Р„ СЃРІС–С‚Р»Рѕ</span></div>
-        <div class="legend-item"><div class="legend-rect orange"></div><span>Р§Р°СЃС‚РєРѕРІРѕ</span></div>
-        <div class="legend-item"><div class="legend-rect blue"></div><span>РќРµРјР°С” СЃРІС–С‚Р»Р°</span></div>
+        <div class="legend-item"><div class="legend-rect yellow"></div><span>Є світло</span></div>
+        <div class="legend-item"><div class="legend-rect orange"></div><span>Частково</span></div>
+        <div class="legend-item"><div class="legend-rect blue"></div><span>Немає світла</span></div>
       </div>
     </div>
     <div class="legend-section">
-      <div class="legend-section-title">Р—Р°РєР»Р°РґРё</div>
+      <div class="legend-section-title">Заклади</div>
       <div class="legend-items">
-        <div class="legend-item"><div class="legend-dot green"></div><span>Р—С– СЃРІС–С‚Р»РѕРј</span></div>
-        <div class="legend-item"><div class="legend-dot red"></div><span>Р‘РµР· СЃРІС–С‚Р»Р°</span></div>
+        <div class="legend-item"><div class="legend-dot green"></div><span>Зі світлом</span></div>
+        <div class="legend-item"><div class="legend-dot red"></div><span>Без світла</span></div>
       </div>
     </div>
   </div>
@@ -248,23 +248,23 @@
   <script>
     const CONFIG = { USE_GOOGLE_SHEETS: false, GOOGLE_SHEETS_URL: '', REFRESH_INTERVAL: 300000 };
 
-    // РЎРўРђРўРЈРЎ Р•Р›Р•РљРўР РћРџРћРЎРўРђР§РђРќРќРЇ Р РђР™РћРќР†Р’
+    // СТАТУС ЕЛЕКТРОПОСТАЧАННЯ РАЙОНІВ
     const districtPowerStatus = {
-      'РћРґРµСЃСЊРєРёР№': 'partial',
-      'Р‘С–Р»РіРѕСЂРѕРґ-Р”РЅС–СЃС‚СЂРѕРІСЃСЊРєРёР№': 'yes',
-      'Р†Р·РјР°С—Р»СЊСЃСЊРєРёР№': 'no',
-      'Р‘РѕР»РіСЂР°РґСЃСЊРєРёР№': 'yes',
-      'Р РѕР·РґС–Р»СЊРЅСЏРЅСЃСЊРєРёР№': 'partial',
-      'РџРѕРґС–Р»СЊСЃСЊРєРёР№': 'partial',
-      'Р‘РµСЂРµР·С–РІСЃСЊРєРёР№': 'no'
+      'Одеський': 'partial',
+      'Білгород-Дністровський': 'yes',
+      'Ізмаїльський': 'no',
+      'Болградський': 'yes',
+      'Роздільнянський': 'partial',
+      'Подільський': 'partial',
+      'Березівський': 'no'
     };
 
     const districtColors = { 'yes': '#facc15', 'partial': '#f97316', 'no': '#3b82f6' };
-    const districtStatusLabels = { 'yes': 'Р„ СЃРІС–С‚Р»Рѕ', 'partial': 'Р§Р°СЃС‚РєРѕРІРѕ', 'no': 'РќРµРјР°С” СЃРІС–С‚Р»Р°' };
+    const districtStatusLabels = { 'yes': 'Є світло', 'partial': 'Частково', 'no': 'Немає світла' };
 
-    // Р‘Р†Р›Р¬РЁ РўРћР§РќР† РњР•Р–Р† 7 Р РђР™РћРќР†Р’ РћР”Р•РЎР¬РљРћР‡ РћР‘Р›РђРЎРўР†
+    // БІЛЬШ ТОЧНІ МЕЖІ 7 РАЙОНІВ ОДЕСЬКОЇ ОБЛАСТІ
     const districtPolygons = {
-      'РћРґРµСЃСЊРєРёР№': {
+      'Одеський': {
         type: 'Polygon',
         coordinates: [[
           [29.65, 46.95], [29.75, 47.05], [29.90, 47.10], [30.10, 47.05], [30.25, 46.95],
@@ -274,7 +274,7 @@
           [29.60, 46.55], [29.55, 46.70], [29.60, 46.85], [29.65, 46.95]
         ]]
       },
-      'Р‘С–Р»РіРѕСЂРѕРґ-Р”РЅС–СЃС‚СЂРѕРІСЃСЊРєРёР№': {
+      'Білгород-Дністровський': {
         type: 'Polygon',
         coordinates: [[
           [29.15, 46.35], [29.35, 46.40], [29.55, 46.35], [29.70, 46.25], [29.85, 46.15],
@@ -283,7 +283,7 @@
           [29.05, 45.90], [29.00, 46.10], [29.05, 46.25], [29.15, 46.35]
         ]]
       },
-      'Р†Р·РјР°С—Р»СЊСЃСЊРєРёР№': {
+      'Ізмаїльський': {
         type: 'Polygon',
         coordinates: [[
           [28.20, 45.75], [28.45, 45.80], [28.70, 45.75], [28.95, 45.65], [29.15, 45.55],
@@ -292,7 +292,7 @@
           [28.05, 45.55], [28.10, 45.70], [28.20, 45.75]
         ]]
       },
-      'Р‘РѕР»РіСЂР°РґСЃСЊРєРёР№': {
+      'Болградський': {
         type: 'Polygon',
         coordinates: [[
           [28.05, 46.30], [28.30, 46.40], [28.55, 46.35], [28.80, 46.25], [29.00, 46.10],
@@ -301,7 +301,7 @@
           [28.05, 46.30]
         ]]
       },
-      'Р РѕР·РґС–Р»СЊРЅСЏРЅСЃСЊРєРёР№': {
+      'Роздільнянський': {
         type: 'Polygon',
         coordinates: [[
           [29.35, 47.40], [29.60, 47.45], [29.85, 47.40], [30.10, 47.30], [30.25, 47.15],
@@ -309,7 +309,7 @@
           [29.55, 46.85], [29.40, 47.00], [29.30, 47.15], [29.30, 47.30], [29.35, 47.40]
         ]]
       },
-      'РџРѕРґС–Р»СЊСЃСЊРєРёР№': {
+      'Подільський': {
         type: 'Polygon',
         coordinates: [[
           [28.75, 48.20], [29.00, 48.25], [29.30, 48.20], [29.60, 48.10], [29.85, 47.95],
@@ -318,7 +318,7 @@
           [28.85, 47.55], [28.75, 47.80], [28.70, 48.00], [28.75, 48.20]
         ]]
       },
-      'Р‘РµСЂРµР·С–РІСЃСЊРєРёР№': {
+      'Березівський': {
         type: 'Polygon',
         coordinates: [[
           [30.20, 47.70], [30.45, 47.75], [30.70, 47.70], [30.95, 47.60], [31.15, 47.45],
@@ -330,62 +330,62 @@
     };
 
     const districtInfo = {
-      'РћРґРµСЃСЊРєРёР№': { population: '1360.9 С‚РёСЃ.', center: [46.45, 30.45], zoom: 9, labelPos: [46.35, 30.55] },
-      'Р‘С–Р»РіРѕСЂРѕРґ-Р”РЅС–СЃС‚СЂРѕРІСЃСЊРєРёР№': { population: '201.4 С‚РёСЃ.', center: [45.90, 29.70], zoom: 10, labelPos: [45.85, 29.65] },
-      'Р†Р·РјР°С—Р»СЊСЃСЊРєРёР№': { population: '206.2 С‚РёСЃ.', center: [45.25, 28.85], zoom: 10, labelPos: [45.20, 28.85] },
-      'Р‘РѕР»РіСЂР°РґСЃСЊРєРёР№': { population: '154.5 С‚РёСЃ.', center: [45.95, 28.45], zoom: 10, labelPos: [45.95, 28.40] },
-      'Р РѕР·РґС–Р»СЊРЅСЏРЅСЃСЊРєРёР№': { population: '104.2 С‚РёСЃ.', center: [47.05, 29.85], zoom: 10, labelPos: [47.05, 29.85] },
-      'РџРѕРґС–Р»СЊСЃСЊРєРёР№': { population: '229.9 С‚РёСЃ.', center: [47.60, 29.50], zoom: 9, labelPos: [47.55, 29.45] },
-      'Р‘РµСЂРµР·С–РІСЃСЊРєРёР№': { population: '123.3 С‚РёСЃ.', center: [47.15, 30.70], zoom: 10, labelPos: [47.15, 30.75] }
+      'Одеський': { population: '1360.9 тис.', center: [46.45, 30.45], zoom: 9, labelPos: [46.35, 30.55] },
+      'Білгород-Дністровський': { population: '201.4 тис.', center: [45.90, 29.70], zoom: 10, labelPos: [45.85, 29.65] },
+      'Ізмаїльський': { population: '206.2 тис.', center: [45.25, 28.85], zoom: 10, labelPos: [45.20, 28.85] },
+      'Болградський': { population: '154.5 тис.', center: [45.95, 28.45], zoom: 10, labelPos: [45.95, 28.40] },
+      'Роздільнянський': { population: '104.2 тис.', center: [47.05, 29.85], zoom: 10, labelPos: [47.05, 29.85] },
+      'Подільський': { population: '229.9 тис.', center: [47.60, 29.50], zoom: 9, labelPos: [47.55, 29.45] },
+      'Березівський': { population: '123.3 тис.', center: [47.15, 30.70], zoom: 10, labelPos: [47.15, 30.75] }
     };
 
     let facilitiesData = [
-      // РћР”Р•РЎР¬РљРР™ Р РђР™РћРќ
-      { id: 1, name: 'РљРќРџ "РћРґРµСЃСЊРєР° РѕР±Р»Р°СЃРЅР° РєР»С–РЅС–С‡РЅР° Р»С–РєР°СЂРЅСЏ"', shortName: 'РћР±Р»Р°СЃРЅР° РєР»С–РЅС–С‡РЅР° Р»С–РєР°СЂРЅСЏ', district: 'РћРґРµСЃСЊРєРёР№', type: 'РћР±Р»Р°СЃРЅРёР№ Р·Р°РєР»Р°Рґ', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, СЃРѕРЅСЏС‡РЅС– РїР°РЅРµР»С–, Р”Р‘Р–', fuelReserve: '7 РґС–Р±', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'РІР»Р°СЃРЅР° СЃРІРµСЂРґР»РѕРІРёРЅР°', waterReserve: '100000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РЅС–', contact: 'Р›СЏС€РµРЅРєРѕ РђСЂС‚РµРј Р’РѕР»РѕРґРёРјРёСЂРѕРІРёС‡ 0668035861', lat: 46.4775, lng: 30.7326 },
-      { id: 2, name: 'РљРќРџ "РћРґРµСЃСЊРєР° РѕР±Р»Р°СЃРЅР° РґРёС‚СЏС‡Р° РєР»С–РЅС–С‡РЅР° Р»С–РєР°СЂРЅСЏ"', shortName: 'РћР±Р»Р°СЃРЅР° РґРёС‚СЏС‡Р° Р»С–РєР°СЂРЅСЏ', district: 'РћРґРµСЃСЊРєРёР№', type: 'РћР±Р»Р°СЃРЅРёР№ Р·Р°РєР»Р°Рґ', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, СЃРѕРЅСЏС‡РЅС– РїР°РЅРµР»С–, Р”Р‘Р–', fuelReserve: '5 РґС–Р±', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', waterReserve: '90000 С‚РµС…РЅ. / 2700 РїРёС‚РЅР°', communication: 'Р„', damages: 'РЅС–', contact: 'Р§С–С…РІР°СЂС–СЏ РҐРІС–С‡Р° РћС‚Р°СЂРѕРІРёС‡ 0674838818', lat: 46.4695, lng: 30.7456 },
-      { id: 3, name: 'РљРќРџ "РћРґРµСЃСЊРєРёР№ РѕР±Р»Р°СЃРЅРёР№ РєР»С–РЅС–С‡РЅРёР№ РјРµРґРёС‡РЅРёР№ С†РµРЅС‚СЂ"', shortName: 'РћР±Р»Р°СЃРЅРёР№ РјРµРґ. С†РµРЅС‚СЂ', district: 'РћРґРµСЃСЊРєРёР№', type: 'РћР±Р»Р°СЃРЅРёР№ Р·Р°РєР»Р°Рґ', hasElectricity: false, alternativePower: 'РЎРѕРЅСЏС‡РЅС– Р±Р°С‚Р°СЂРµС—', fuelReserve: '20 РґС–Р±', heating: 'РІС–РґСЃСѓС‚РЅС”', water: 'РІС–РґСЃСѓС‚РЅС”', waterReserve: '5 Р»', communication: 'Р„', damages: 'РЅС–', contact: 'РўРєР°С‡ Р’.Рђ. 097 615 4722', lat: 46.4825, lng: 30.7216 },
-      { id: 4, name: 'РљРќРџ "Р‘Р°РіР°С‚РѕРїСЂРѕС„С–Р»СЊРЅРёР№ С€РїРёС‚Р°Р»СЊ РІРµС‚РµСЂР°РЅС–РІ"', shortName: 'РЁРїРёС‚Р°Р»СЊ РІРµС‚РµСЂР°РЅС–РІ', district: 'РћРґРµСЃСЊРєРёР№', type: 'РћР±Р»Р°СЃРЅРёР№ Р·Р°РєР»Р°Рґ', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, Р”Р‘Р–', fuelReserve: '5 РґС–Р±', heating: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ, РЅР°СЏРІРЅРµ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ, РЅР°СЏРІРЅРµ', waterReserve: '5000 С‚РµС…РЅ. / 1000 РїРёС‚РЅР°', communication: 'Р„', damages: 'РЅС–', contact: 'Р–СѓРєРѕРІР° Р†СЂРёРЅР° 0930690099', lat: 46.4655, lng: 30.7586 },
-      { id: 5, name: 'РљРќРџ "РћРґРµСЃСЊРєРёР№ РѕР±Р»Р°СЃРЅРёР№ С†РµРЅС‚СЂ СЃРѕС†С–Р°Р»СЊРЅРѕ Р·РЅР°С‡СѓС‰РёС… С…РІРѕСЂРѕР±"', shortName: 'Р¦РµРЅС‚СЂ СЃРѕС†. Р·РЅР°С‡СѓС‰РёС… С…РІРѕСЂРѕР±', district: 'РћРґРµСЃСЊРєРёР№', type: 'РћР±Р»Р°СЃРЅРёР№ Р·Р°РєР»Р°Рґ', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё', fuelReserve: '5 РґС–Р±', heating: 'С‡Р°СЃС‚РєРѕРІРµ', water: 'С‡Р°СЃС‚РєРѕРІРµ', waterReserve: '1000 Р»', communication: 'Р„', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'Р¤С–Р»Р°С‚РµРЅРєРѕРІР° РђРЅР°СЃС‚Р°СЃС–СЏ 0677428025', lat: 46.4545, lng: 30.7126 },
-      { id: 6, name: 'РљРќРџ "РћРґРµСЃСЊРєРёР№ РѕР±Р»Р°СЃРЅРёР№ С†РµРЅС‚СЂ РЅРµС„СЂРѕР»РѕРіС–С— С‚Р° РґС–Р°Р»С–Р·Сѓ"', shortName: 'Р¦РµРЅС‚СЂ РЅРµС„СЂРѕР»РѕРіС–С— С‚Р° РґС–Р°Р»С–Р·Сѓ', district: 'РћРґРµСЃСЊРєРёР№', type: 'РћР±Р»Р°СЃРЅРёР№ Р·Р°РєР»Р°Рґ', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё', fuelReserve: '20 РґС–Р±', heating: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ, РІС–РґСЃСѓС‚РЅС”', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ, РІС–РґСЃСѓС‚РЅС”', waterReserve: '6000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'Р‘Р»РѕС…С–РЅР° Рђ.РЎ 0983882000', lat: 46.4635, lng: 30.7406 },
-      { id: 7, name: 'РљРќРџ "РћРґРµСЃСЊРєРёР№ СЂРµРіС–РѕРЅР°Р»СЊРЅРёР№ РєР»С–РЅС–С‡РЅРёР№ РїСЂРѕС‚РёРїСѓС…Р»РёРЅРЅРёР№ С†РµРЅС‚СЂ"', shortName: 'РџСЂРѕС‚РёРїСѓС…Р»РёРЅРЅРёР№ С†РµРЅС‚СЂ', district: 'РћРґРµСЃСЊРєРёР№', type: 'РћР±Р»Р°СЃРЅРёР№ Р·Р°РєР»Р°Рґ', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё', fuelReserve: '5 РґС–Р±', heating: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ, РЅР°СЏРІРЅРµ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ, РЅРµРјР°С”', waterReserve: '8000 С‚РµС…РЅ. / 1000 РїРёС‚РЅР°', communication: 'РќР°СЏРІРЅРёР№', damages: 'РЅРµРјР°С”', contact: 'РЎС‚РµС„Р°РЅРѕРІ Р СѓСЃС‚Р°Рј 0503367576', lat: 46.4515, lng: 30.7256 },
-      { id: 8, name: 'РљРќРџ "РћРґРµСЃСЊРєР° РѕР±Р»Р°СЃРЅР° СЃС‚Р°РЅС†С–СЏ РїРµСЂРµР»РёРІР°РЅРЅСЏ РєСЂРѕРІС–"', shortName: 'РЎС‚Р°РЅС†С–СЏ РїРµСЂРµР»РёРІР°РЅРЅСЏ РєСЂРѕРІС–', district: 'РћРґРµСЃСЊРєРёР№', type: 'РћР±Р»Р°СЃРЅРёР№ Р·Р°РєР»Р°Рґ', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё (Р”Р“Рђ-100)', fuelReserve: '5 РґС–Р±', heating: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ, РЅР°СЏРІРЅРµ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ, РЅР°СЏРІРЅРµ', waterReserve: '4000 С‚РµС…РЅ. / 1000 РїРёС‚РЅР°', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РўРєР°С‡РµРЅРєРѕ РњР°СЂРёРЅР° 0979395274', lat: 46.4725, lng: 30.7176 },
-      { id: 16, name: 'РљРќРџ "РњС–СЃСЊРєР° РєР»С–РЅС–С‡РЅР° Р»С–РєР°СЂРЅСЏ в„– 10"', shortName: 'РњРљР› в„– 10', district: 'РћРґРµСЃСЊРєРёР№', type: 'РњС–СЃСЊРєР° Р»С–РєР°СЂРЅСЏ', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, Tesla', fuelReserve: '30% (РїРѕРїРѕРІРЅРµРЅРЅСЏ)', heating: 'РІС–РґСЃСѓС‚РЅС”', water: 'СЃРІРµСЂРґР»РѕРІРёРЅР°', waterReserve: 'РќРµРѕР±РјРµР¶РµРЅРёР№', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РЎРµСЂРіС–Р№ РћС€РѕРІСЃСЊРєРёР№ +380671655291', lat: 46.4255, lng: 30.7656 },
-      { id: 25, name: 'РљРќРџ "Р”РёС‚СЏС‡Р° РјС–СЃСЊРєР° РєР»С–РЅС–С‡РЅР° Р»С–РєР°СЂРЅСЏ в„– 3"', shortName: 'Р”РёС‚СЏС‡Р° РњРљР› в„– 3', district: 'РћРґРµСЃСЊРєРёР№', type: 'Р”РёС‚СЏС‡Р° Р»С–РєР°СЂРЅСЏ', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, СЃРѕРЅСЏС‡РЅС– РїР°РЅРµР»С–, Tesla, Р”Р‘Р–', fuelReserve: 'РџРѕСЃС‚С–Р№РЅРµ РїРѕРїРѕРІРЅРµРЅРЅСЏ', heating: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ, РЅР°СЏРІРЅРµ', water: 'С‡Р°СЃС‚РєРѕРІРµ', waterReserve: '16700 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'Р‘СѓСЂРµРіР° Р›СЋРґРјРёР»Р° 0964248612', lat: 46.3955, lng: 30.6956 },
-      { id: 26, name: 'РљРќРџ "РњС–СЃСЊРєР° РєР»С–РЅС–С‡РЅР° С–РЅС„РµРєС†С–Р№РЅР° Р»С–РєР°СЂРЅСЏ"', shortName: 'Р†РЅС„РµРєС†С–Р№РЅР° Р»С–РєР°СЂРЅСЏ', district: 'РћРґРµСЃСЊРєРёР№', type: 'РњС–СЃСЊРєР° Р»С–РєР°СЂРЅСЏ', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂ, СЃРѕРЅСЏС‡РЅС– РїР°РЅРµР»С–', fuelReserve: 'РћР±СЃР»СѓРіРѕРІСѓС” РњС–СЃСЊРєСЃРІС–С‚Р»Рѕ', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ РўР“Рћ', water: 'С”, РЅРёР·СЊРєРёР№ С‚РёСЃРє + СЃРІРµСЂРґР»РѕРІРёРЅР°', waterReserve: '6000 Р»', communication: 'Р„', damages: 'РЅРµРјР°С”', contact: 'Р›Р°РІСЂСЋРєРѕРІР° РЎРІС–С‚Р»Р°РЅР° 0503337959', lat: 46.4355, lng: 30.7556 },
-      { id: 28, name: 'РљРќРџ "Р”РёС‚СЏС‡Р° РјС–СЃСЊРєР° РїРѕР»С–РєР»С–РЅС–РєР° в„– 3"', shortName: 'Р”РёС‚СЏС‡Р° РїРѕР»С–РєР»С–РЅС–РєР° в„– 3', district: 'РћРґРµСЃСЊРєРёР№', type: 'РџРѕР»С–РєР»С–РЅС–РєР°', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂ, Р°РєСѓРјСѓР»СЏС‚РѕСЂРЅРёР№ РіРµРЅРµСЂР°С‚РѕСЂ', fuelReserve: '5 РґРЅС–РІ', heating: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ, С”', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ, С”', waterReserve: 'Р„', communication: 'Р„', damages: 'РЅС–', contact: 'РњР°СЂРјСѓСЃРµРІРёС‡ Р›Р°СЂРёСЃР° 0662548255', lat: 46.4455, lng: 30.7856 },
-      { id: 15, name: 'РљРќРџ "Р§РѕСЂРЅРѕРјРѕСЂСЃСЊРєР° Р»С–РєР°СЂРЅСЏ"', shortName: 'Р§РѕСЂРЅРѕРјРѕСЂСЃСЊРєР° Р»С–РєР°СЂРЅСЏ', district: 'РћРґРµСЃСЊРєРёР№', type: 'РњС–СЃСЊРєР° Р»С–РєР°СЂРЅСЏ', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё', fuelReserve: '7 РґС–Р±', heating: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', waterReserve: '25000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РђРЅРґСЂС”С”РІ Р®СЂС–Р№ 063 726 2404', lat: 46.3039, lng: 30.6553 },
-      { id: 20, name: 'РљРќРџ "РћРІС–РґС–РѕРїРѕР»СЊСЃСЊРєР° Р»С–РєР°СЂРЅСЏ"', shortName: 'РћРІС–РґС–РѕРїРѕР»СЊСЃСЊРєР° Р»С–РєР°СЂРЅСЏ', district: 'РћРґРµСЃСЊРєРёР№', type: 'РЎРµР»РёС‰РЅР° Р»С–РєР°СЂРЅСЏ', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, Р°РєСѓРјСѓР»СЏС‚РѕСЂРё', fuelReserve: '5-7 РґРЅС–РІ', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ (РіР°Р· + РґСЂРѕРІР°)', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', waterReserve: '3000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РЎР°Р»Р°С‚Р° РўРµС‚СЏРЅР° 0966148862', lat: 46.2500, lng: 30.4500 },
-      { id: 27, name: 'РљРќРџ "Р’РµР»РёРєРѕРґРѕР»РёРЅСЃСЊРєРёР№ РєРѕРЅСЃСѓР»СЊС‚Р°С‚РёРІРЅРѕ-РґС–Р°РіРЅРѕСЃС‚РёС‡РЅРёР№ С†РµРЅС‚СЂ"', shortName: 'Р’РµР»РёРєРѕРґРѕР»РёРЅСЃСЊРєРёР№ РљР”Р¦', district: 'РћРґРµСЃСЊРєРёР№', type: 'Р”С–Р°РіРЅРѕСЃС‚РёС‡РЅРёР№ С†РµРЅС‚СЂ', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё', fuelReserve: '5 РґС–Р±', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ (РІС–РґСЃСѓС‚РЅС”)', waterReserve: '26000 Р»', communication: 'РњРѕР±С–Р»СЊРЅРёР№', damages: 'РЅРµРјР°С”', contact: 'Р‘С”Р»С”РјСѓРє РћР»РµРЅР° 0972859399', lat: 46.3667, lng: 30.5833 },
-      { id: 29, name: 'РљРќРџ "Р“СЂРёР±С–РІСЃСЊРєР° Р°РјР±СѓР»Р°С‚РѕСЂС–СЏ Р—РџРЎРњ"', shortName: 'Р“СЂРёР±С–РІСЃСЊРєР° Р°РјР±СѓР»Р°С‚РѕСЂС–СЏ', district: 'РћРґРµСЃСЊРєРёР№', type: 'РђРјР±СѓР»Р°С‚РѕСЂС–СЏ', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё', fuelReserve: '5 РґРЅС–РІ', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'РєРѕРјСѓРЅР°Р»СЊРЅР° СЃРІРµСЂРґР»РѕРІРёРЅР°', waterReserve: '2000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РџР»РѕС…РѕС‚РЅСЋРє РџР°РІР»Рѕ +380679372845', lat: 46.3333, lng: 30.4667 },
-      { id: 32, name: 'РљРќРџ "РўРµРїР»РѕРґР°СЂСЃСЊРєРёР№ С†РµРЅС‚СЂ РџРњРЎР”"', shortName: 'РўРµРїР»РѕРґР°СЂСЃСЊРєРёР№ Р¦РџРњРЎР”', district: 'РћРґРµСЃСЊРєРёР№', type: 'Р¦РџРњРЎР”', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё', fuelReserve: '5 РґС–Р±', heating: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ (РЅС–)', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ (С‚Р°Рє)', waterReserve: '760 Р»', communication: 'Р„', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'Р¦РёРјР±Р°Р»СЋРє РћРєСЃР°РЅР° 0974962775', lat: 46.5000, lng: 30.3333 },
-      { id: 33, name: 'РљРќРџ "Р¦РџРњРЎР” РЇСЃСЊРєС–РІСЃСЊРєРѕС— СЃС–Р»СЊСЃСЊРєРѕС— СЂР°РґРё"', shortName: 'РЇСЃСЊРєС–РІСЃСЊРєРёР№ Р¦РџРњРЎР”', district: 'РћРґРµСЃСЊРєРёР№', type: 'Р¦РџРњРЎР”', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, СЃРѕРЅСЏС‡РЅС– РїР°РЅРµР»С–', fuelReserve: '5 РґС–Р±', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'РЅР°СЏРІРЅРµ', waterReserve: '2000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РљСѓСЂРєРѕ Р”РµРЅРёСЃ 0960932774', lat: 46.6000, lng: 30.2500 },
-      { id: 34, name: 'РљРќРџ "РћРІС–РґС–РѕРїРѕР»СЊСЃСЊРєРёР№ С†РµРЅС‚СЂ РџРњРЎР”"', shortName: 'РћРІС–РґС–РѕРїРѕР»СЊСЃСЊРєРёР№ Р¦РџРњРЎР”', district: 'РћРґРµСЃСЊРєРёР№', type: 'Р¦РџРњРЎР”', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё', fuelReserve: '5 РґС–Р±', heating: 'РєРѕС‚РµР»СЊРЅСЏ', water: 'РЅР°СЏРІРЅРµ', waterReserve: '300 Р»', communication: 'Р„', damages: 'РЅС–', contact: 'РљР°Р±Р°Р»СЊСЃСЊРєР° РћРєСЃР°РЅР°', lat: 46.2667, lng: 30.4333 },
-      // Р‘Р†Р›Р“РћР РћР”-Р”РќР†РЎРўР РћР’РЎР¬РљРР™ Р РђР™РћРќ
-      { id: 11, name: 'РљРќРџ "Р‘С–Р»РіРѕСЂРѕРґ-Р”РЅС–СЃС‚СЂРѕРІСЃСЊРєР° РјС–СЃСЊРєР° Р±Р°РіР°С‚РѕРїСЂРѕС„С–Р»СЊРЅР° Р»С–РєР°СЂРЅСЏ"', shortName: 'Р‘-Р”РЅС–СЃС‚СЂРѕРІСЃСЊРєР° РјС–СЃСЊРєР° Р»С–РєР°СЂРЅСЏ', district: 'Р‘С–Р»РіРѕСЂРѕРґ-Р”РЅС–СЃС‚СЂРѕРІСЃСЊРєРёР№', type: 'РњС–СЃСЊРєР° Р»С–РєР°СЂРЅСЏ', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, Р°РєСѓРјСѓР»СЏС‚РѕСЂРё, Р”Р‘Р–', fuelReserve: '7 РґС–Р±', heating: 'С†РµРЅС‚СЂР°Р»СЊРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', waterReserve: '18000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'Р–РЅСЏРєС–РЅ Р’С–С‚Р°Р»С–Р№ 0977226393', lat: 46.1958, lng: 30.3461 },
-      { id: 30, name: 'РљРќРџ "РўР°С‚Р°СЂР±СѓРЅР°СЂСЃСЊРєРёР№ СЂР°Р№РѕРЅРЅРёР№ С†РµРЅС‚СЂ РџРњРЎР”"', shortName: 'РўР°С‚Р°СЂР±СѓРЅР°СЂСЃСЊРєРёР№ Р¦РџРњРЎР”', district: 'Р‘С–Р»РіРѕСЂРѕРґ-Р”РЅС–СЃС‚СЂРѕРІСЃСЊРєРёР№', type: 'Р¦РџРњРЎР”', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, СЃРѕРЅСЏС‡РЅС– РїР°РЅРµР»С–', fuelReserve: '7 РґС–Р±', heating: 'РјС–СЃС†РµРІС– РєРѕС‚РµР»СЊРЅС–', water: 'РЅР°СЏРІРЅРµ', waterReserve: '5 РґРЅС–РІ', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РЎС‚РѕРіРЅС–Р№ РЎ.Р’. 0962601962', lat: 45.8500, lng: 29.6167 },
-      { id: 31, name: 'РљРџ "РЎР°СЂР°С‚СЃСЊРєРёР№ С†РµРЅС‚СЂ РџРњРЎР”"', shortName: 'РЎР°СЂР°С‚СЃСЊРєРёР№ Р¦РџРњРЎР”', district: 'Р‘С–Р»РіРѕСЂРѕРґ-Р”РЅС–СЃС‚СЂРѕРІСЃСЊРєРёР№', type: 'Р¦РџРњРЎР”', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё', fuelReserve: '10 РґРЅС–РІ', heating: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', waterReserve: '2 РґРЅС–', communication: 'РќР°СЏРІРЅРёР№', damages: 'РЅС–', contact: 'Р“СЂРёР±РµРЅРєРѕ РЎРµСЂРіС–Р№ 0971896450', lat: 46.0167, lng: 29.6667 },
-      // Р†Р—РњРђР‡Р›Р¬РЎР¬РљРР™ Р РђР™РћРќ
-      { id: 12, name: 'РљРќРџ "РљС–Р»С–Р№СЃСЊРєР° Р±Р°РіР°С‚РѕРїСЂРѕС„С–Р»СЊРЅР° Р»С–РєР°СЂРЅСЏ"', shortName: 'РљС–Р»С–Р№СЃСЊРєР° Р»С–РєР°СЂРЅСЏ', district: 'Р†Р·РјР°С—Р»СЊСЃСЊРєРёР№', type: 'РњС–СЃСЊРєР° Р»С–РєР°СЂРЅСЏ', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂ', fuelReserve: '7 РґС–Р±', heating: 'Р°РІС‚РѕРЅРѕРјРЅРµ (РІСѓРіС–Р»СЊРЅС– РєРѕС‚Р»Рё)', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ + СЂРµР·РµСЂРІ', waterReserve: '41000 Р»', communication: 'РњРѕР±С–Р»СЊРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: "Р–СѓСЂ'СЏРЅ Р’Р°СЃРёР»С–Р№ 0972174231", lat: 45.4422, lng: 29.2672 },
-      // Р‘РћР›Р“Р РђР”РЎР¬РљРР™ Р РђР™РћРќ - Р’РРџР РђР’Р›Р•РќР† РљРћРћР Р”РРќРђРўР
-      { id: 23, name: 'РљРќРџ "Р‘РµСЃСЃР°СЂР°Р±СЃСЊРєР° Р±Р°РіР°С‚РѕРїСЂРѕС„С–Р»СЊРЅР° Р»С–РєР°СЂРЅСЏ"', shortName: 'Р‘РµСЃСЃР°СЂР°Р±СЃСЊРєР° Р»С–РєР°СЂРЅСЏ', district: 'Р‘РѕР»РіСЂР°РґСЃСЊРєРёР№', type: 'РЎРµР»РёС‰РЅР° Р»С–РєР°СЂРЅСЏ', hasElectricity: true, alternativePower: 'Р”РёР·РµР»СЊ-РіРµРЅРµСЂР°С‚РѕСЂ', fuelReserve: '7 РґС–Р±', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', waterReserve: '3000 Р»', communication: 'РќРµ РїРѕСЂСѓС€РµРЅРёР№', damages: 'РЅРµРјР°С”', contact: 'Р РѕС‚Р°СЂ РЎ.Р†. 0982674276', lat: 46.1865, lng: 29.1501 },
-      // Р РћР—Р”Р†Р›Р¬РќРЇРќРЎР¬РљРР™ Р РђР™РћРќ
-      { id: 14, name: 'РљРќРџ "Р РѕР·РґС–Р»СЊРЅСЏРЅСЃСЊРєР° Р±Р°РіР°С‚РѕРїСЂРѕС„С–Р»СЊРЅР° Р»С–РєР°СЂРЅСЏ"', shortName: 'Р РѕР·РґС–Р»СЊРЅСЏРЅСЃСЊРєР° Р»С–РєР°СЂРЅСЏ', district: 'Р РѕР·РґС–Р»СЊРЅСЏРЅСЃСЊРєРёР№', type: 'РњС–СЃСЊРєР° Р»С–РєР°СЂРЅСЏ', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, СЃРѕРЅСЏС‡РЅС– РїР°РЅРµР»С–', fuelReserve: '7 РґС–Р±', heating: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ, РЅР°СЏРІРЅРµ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ + СЃРІРµСЂРґР»РѕРІРёРЅР°', waterReserve: '6000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РћСЃРёРїРѕРІ Р’.Рћ. 0669244340', lat: 46.8461, lng: 30.0828 },
-      { id: 17, name: 'РљРќРџ "Р—Р°С…Р°СЂС–РІСЃСЊРєР° Р±Р°РіР°С‚РѕРїСЂРѕС„С–Р»СЊРЅР° Р»С–РєР°СЂРЅСЏ"', shortName: 'Р—Р°С…Р°СЂС–РІСЃСЊРєР° Р»С–РєР°СЂРЅСЏ', district: 'Р РѕР·РґС–Р»СЊРЅСЏРЅСЃСЊРєРёР№', type: 'РЎС–Р»СЊСЃСЊРєР° Р»С–РєР°СЂРЅСЏ', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, СЃРѕРЅСЏС‡РЅС– РїР°РЅРµР»С–', fuelReserve: '7 РґС–Р±', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', waterReserve: '5000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'Р“Р°РЅР·С–Р№ Рђ.Рњ 0507247345', lat: 47.1167, lng: 30.0833 },
-      { id: 37, name: 'РљРќРџ "Р¦РµР±СЂРёРєС–РІСЃСЊРєРёР№ С†РµРЅС‚СЂ РџРњРЎР”"', shortName: 'Р¦РµР±СЂРёРєС–РІСЃСЊРєРёР№ Р¦РџРњРЎР”', district: 'Р РѕР·РґС–Р»СЊРЅСЏРЅСЃСЊРєРёР№', type: 'Р¦РџРњРЎР”', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё (1 Р· 2)', fuelReserve: '7 РґРЅС–РІ', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ (РіР°Р·)', water: 'РІР»Р°СЃРЅР° СЃРІРµСЂРґР»РѕРІРёРЅР°', waterReserve: 'Р„', communication: 'Р„', damages: 'РЅС–', contact: 'РџР»Р°С‚РѕРЅРѕРІР° Р›.Р’. 0967459159', lat: 47.0500, lng: 30.0667 },
-      { id: 38, name: 'РљРќРџ "Р—Р°С…Р°СЂС–РІСЃСЊРєРёР№ С†РµРЅС‚СЂ РџРњРЎР”"', shortName: 'Р—Р°С…Р°СЂС–РІСЃСЊРєРёР№ Р¦РџРњРЎР”', district: 'Р РѕР·РґС–Р»СЊРЅСЏРЅСЃСЊРєРёР№', type: 'Р¦РџРњРЎР”', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂ, СЃРѕРЅСЏС‡РЅС– РїР°РЅРµР»С– 7 РєР’С‚', fuelReserve: '5 РґРЅС–РІ', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', waterReserve: '400 Р»', communication: 'Р„', damages: 'РЅС–', contact: '', lat: 47.1250, lng: 30.0750 },
-      { id: 39, name: 'РљРќРџ "Р”РёРІС–Р·С–Р№СЃСЊРєРёР№ С†РµРЅС‚СЂ РџРњРЎР”"', shortName: 'Р”РёРІС–Р·С–Р№СЃСЊРєРёР№ Р¦РџРњРЎР”', district: 'Р РѕР·РґС–Р»СЊРЅСЏРЅСЃСЊРєРёР№', type: 'Р¦РџРњРЎР”', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё', fuelReserve: '10 РґРЅС–РІ', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'РЅР°СЏРІРЅРµ', waterReserve: '20 РґС–Р±', communication: 'Р„', damages: 'РЅС–', contact: 'Р‘Р°РєСѓРјРµРЅРєРѕ Р›. 0682726947', lat: 46.9000, lng: 30.0167 },
-      // РџРћР”Р†Р›Р¬РЎР¬РљРР™ Р РђР™РћРќ
-      { id: 9, name: 'РљРџ "Р‘Р°Р»С‚СЃСЊРєР° Р±Р°РіР°С‚РѕРїСЂРѕС„С–Р»СЊРЅР° Р»С–РєР°СЂРЅСЏ"', shortName: 'Р‘Р°Р»С‚СЃСЊРєР° Р»С–РєР°СЂРЅСЏ', district: 'РџРѕРґС–Р»СЊСЃСЊРєРёР№', type: 'РњС–СЃСЊРєР° Р»С–РєР°СЂРЅСЏ', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, СЃРѕРЅСЏС‡РЅР° СЃС‚Р°РЅС†С–СЏ, Р”Р‘Р–', fuelReserve: '10 РґС–Р±', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'СЃРІРµСЂРґР»РѕРІРёРЅР°', waterReserve: '20000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РљР°С†РјР°Р·Р° Р РѕРјР°РЅ 0952284517', lat: 47.9361, lng: 29.6233 },
-      { id: 13, name: 'РљРќРџ "РџРѕРґС–Р»СЊСЃСЊРєР° РјС–СЃСЊРєР° Р»С–РєР°СЂРЅСЏ"', shortName: 'РџРѕРґС–Р»СЊСЃСЊРєР° Р»С–РєР°СЂРЅСЏ', district: 'РџРѕРґС–Р»СЊСЃСЊРєРёР№', type: 'РњС–СЃСЊРєР° Р»С–РєР°СЂРЅСЏ', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, СЃРѕРЅСЏС‡РЅС– РїР°РЅРµР»С–, Р°РєСѓРјСѓР»СЏС‚РѕСЂРё', fuelReserve: '7 РґС–Р±', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', waterReserve: '6000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'Р›С–С‚СЏРЅСЃСЊРєРёР№ Р”РјРёС‚СЂРѕ 0984842595', lat: 47.7494, lng: 29.5300 },
-      { id: 18, name: 'РљРќРџ "Р›СЋР±Р°С€С–РІСЃСЊРєР° Р±Р°РіР°С‚РѕРїСЂРѕС„С–Р»СЊРЅР° Р»С–РєР°СЂРЅСЏ"', shortName: 'Р›СЋР±Р°С€С–РІСЃСЊРєР° Р»С–РєР°СЂРЅСЏ', district: 'РџРѕРґС–Р»СЊСЃСЊРєРёР№', type: 'РЎС–Р»СЊСЃСЊРєР° Р»С–РєР°СЂРЅСЏ', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, СЃРѕРЅСЏС‡РЅС– РїР°РЅРµР»С–, Р°РєСѓРјСѓР»СЏС‚РѕСЂРё', fuelReserve: '7 РґС–Р±', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'РІР»Р°СЃРЅР° СЃРІРµСЂРґР»РѕРІРёРЅР°', waterReserve: '5000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'Р¤РѕРјС–РЅ Р”РјРёС‚СЂРѕ 0674896441', lat: 47.8389, lng: 30.2611 },
-      { id: 19, name: 'РљРќРџ "РљРѕРґРёРјСЃСЊРєР° Р»С–РєР°СЂРЅСЏ"', shortName: 'РљРѕРґРёРјСЃСЊРєР° Р»С–РєР°СЂРЅСЏ', district: 'РџРѕРґС–Р»СЊСЃСЊРєРёР№', type: 'РњС–СЃСЊРєР° Р»С–РєР°СЂРЅСЏ', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, СЃРѕРЅСЏС‡РЅС– РїР°РЅРµР»С–, Р”Р‘Р–', fuelReserve: '20 РґРЅС–РІ', heating: 'Р°Р»СЊС‚РµСЂРЅР°С‚РёРІРЅРµ', water: 'СЃРІРµСЂРґР»РѕРІРёРЅР° + С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', waterReserve: '5000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'Р’РѕР»РѕС€РёРЅР° Р›Р°СЂРёСЃР° 0967229937', lat: 48.1033, lng: 29.1208 },
-      { id: 21, name: 'РљРќРџ "Р¦Р Р› РџРѕРґС–Р»СЊСЃСЊРєРѕРіРѕ СЂР°Р№РѕРЅСѓ"', shortName: 'Р¦Р Р› РџРѕРґС–Р»СЊСЃСЊРєРѕРіРѕ СЂ-РЅСѓ', district: 'РџРѕРґС–Р»СЊСЃСЊРєРёР№', type: 'Р¦Р Р›', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё', fuelReserve: '20 РґРЅС–РІ', heating: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', waterReserve: '7000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РљР°С‡Р°РЅ Рћ.Рњ. 0953204308', lat: 47.4167, lng: 29.5500 },
-      { id: 22, name: 'РљРќРџ "РЎР°РІСЂР°РЅСЃСЊРєР° Р»С–РєР°СЂРЅСЏ"', shortName: 'РЎР°РІСЂР°РЅСЃСЊРєР° Р»С–РєР°СЂРЅСЏ', district: 'РџРѕРґС–Р»СЊСЃСЊРєРёР№', type: 'РЎРµР»РёС‰РЅР° Р»С–РєР°СЂРЅСЏ', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё', fuelReserve: '5 РґС–Р±', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ + СЃРІРµСЂРґР»РѕРІРёРЅР°', waterReserve: '1000 Р»', communication: 'РњРѕР±С–Р»СЊРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РўРєР°С‡ РЎС‚Р°РЅС–СЃР»Р°РІ 0679422414', lat: 48.1331, lng: 30.0836 },
-      { id: 35, name: 'РљРќРџ "Р¦РџРњРЎР” РљСѓСЏР»СЊРЅРёС†СЊРєРѕС— СЃС–Р»СЊСЃСЊРєРѕС— СЂР°РґРё"', shortName: 'РљСѓСЏР»СЊРЅРёС†СЊРєРёР№ Р¦РџРњРЎР”', district: 'РџРѕРґС–Р»СЊСЃСЊРєРёР№', type: 'Р¦РџРњРЎР”', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё', fuelReserve: '5 РґРЅС–РІ', heating: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ (РЅС–)', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ (С‚Р°Рє)', waterReserve: '2205 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РЎРµСЂРµРґРёРЅСЃСЊРєР° Рў.Р’. 0668838347', lat: 46.8333, lng: 30.3833 },
-      { id: 36, name: 'РљРќРџ "Р¦РџРњРЎР” РџРѕРґС–Р»СЊСЃСЊРєРѕС— РјС–СЃСЊРєРѕС— СЂР°РґРё"', shortName: 'РџРѕРґС–Р»СЊСЃСЊРєРёР№ Р¦РџРњРЎР”', district: 'РџРѕРґС–Р»СЊСЃСЊРєРёР№', type: 'Р¦РџРњРЎР”', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё', fuelReserve: '7 РґС–Р±', heating: 'РєРѕС‚РµР»СЊРЅСЏ', water: 'С†РµРЅС‚СЂР°Р»С–Р·РѕРІР°РЅРµ', waterReserve: '2000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РњРµРјРµР№ Р›.Рћ. 0957166223', lat: 47.7556, lng: 29.5389 },
-      // Р‘Р•Р Р•Р—Р†Р’РЎР¬РљРР™ Р РђР™РћРќ
-      { id: 10, name: 'РљРќРџ "Р‘РµСЂРµР·С–РІСЃСЊРєР° С†РµРЅС‚СЂР°Р»СЊРЅР° РјС–СЃСЊРєР° Р»С–РєР°СЂРЅСЏ"', shortName: 'Р‘РµСЂРµР·С–РІСЃСЊРєР° Р»С–РєР°СЂРЅСЏ', district: 'Р‘РµСЂРµР·С–РІСЃСЊРєРёР№', type: 'РњС–СЃСЊРєР° Р»С–РєР°СЂРЅСЏ', hasElectricity: false, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂ, СЃРѕРЅСЏС‡РЅС– Р±Р°С‚Р°СЂРµС—', fuelReserve: '10 РґС–Р±', heating: 'РІР»Р°СЃРЅР° РєРѕС‚РµР»СЊРЅСЏ', water: 'СЃРІРµСЂРґР»РѕРІРёРЅР°', waterReserve: '25000 Р»', communication: 'РќР°СЏРІРЅРёР№', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РђР»РµР№РЅРѕРІ РћР»РµРєСЃР°РЅРґСЂ 0688730373', lat: 47.1914, lng: 30.9161 },
-      { id: 24, name: 'РљРќРџ "Р†РІР°РЅС–РІСЃСЊРєРёР№ РјРµРґРёС‡РЅРёР№ С†РµРЅС‚СЂ"', shortName: 'Р†РІР°РЅС–РІСЃСЊРєРёР№ РјРµРґ. С†РµРЅС‚СЂ', district: 'Р‘РµСЂРµР·С–РІСЃСЊРєРёР№', type: 'РЎРµР»РёС‰РЅРёР№ С†РµРЅС‚СЂ', hasElectricity: true, alternativePower: 'Р“РµРЅРµСЂР°С‚РѕСЂРё, Tesla', fuelReserve: '5 РґРЅС–РІ', heating: 'Р°Р»СЊС‚РµСЂРЅР°С‚РёРІРЅРµ', water: 'Р°Р»СЊС‚РµСЂРЅР°С‚РёРІРЅРµ', waterReserve: '8000 Р»', communication: 'Р„', damages: 'РІС–РґСЃСѓС‚РЅС–', contact: 'РњР°С†РєСѓР» Р“Р°Р»РёРЅР° 0505170002', lat: 47.2833, lng: 30.7167 }
+      // ОДЕСЬКИЙ РАЙОН
+      { id: 1, name: 'КНП "Одеська обласна клінічна лікарня"', shortName: 'Обласна клінічна лікарня', district: 'Одеський', type: 'Обласний заклад', hasElectricity: false, alternativePower: 'Генератори, сонячні панелі, ДБЖ', fuelReserve: '7 діб', heating: 'власна котельня', water: 'власна свердловина', waterReserve: '100000 л', communication: 'Наявний', damages: 'ні', contact: 'Ляшенко Артем Володимирович 0668035861', lat: 46.4775, lng: 30.7326 },
+      { id: 2, name: 'КНП "Одеська обласна дитяча клінічна лікарня"', shortName: 'Обласна дитяча лікарня', district: 'Одеський', type: 'Обласний заклад', hasElectricity: false, alternativePower: 'Генератори, сонячні панелі, ДБЖ', fuelReserve: '5 діб', heating: 'власна котельня', water: 'централізоване', waterReserve: '90000 техн. / 2700 питна', communication: 'Є', damages: 'ні', contact: 'Чіхварія Хвіча Отарович 0674838818', lat: 46.4695, lng: 30.7456 },
+      { id: 3, name: 'КНП "Одеський обласний клінічний медичний центр"', shortName: 'Обласний мед. центр', district: 'Одеський', type: 'Обласний заклад', hasElectricity: false, alternativePower: 'Сонячні батареї', fuelReserve: '20 діб', heating: 'відсутнє', water: 'відсутнє', waterReserve: '5 л', communication: 'Є', damages: 'ні', contact: 'Ткач В.А. 097 615 4722', lat: 46.4825, lng: 30.7216 },
+      { id: 4, name: 'КНП "Багатопрофільний шпиталь ветеранів"', shortName: 'Шпиталь ветеранів', district: 'Одеський', type: 'Обласний заклад', hasElectricity: false, alternativePower: 'Генератори, ДБЖ', fuelReserve: '5 діб', heating: 'централізоване, наявне', water: 'централізоване, наявне', waterReserve: '5000 техн. / 1000 питна', communication: 'Є', damages: 'ні', contact: 'Жукова Ірина 0930690099', lat: 46.4655, lng: 30.7586 },
+      { id: 5, name: 'КНП "Одеський обласний центр соціально значущих хвороб"', shortName: 'Центр соц. значущих хвороб', district: 'Одеський', type: 'Обласний заклад', hasElectricity: false, alternativePower: 'Генератори', fuelReserve: '5 діб', heating: 'часткове', water: 'часткове', waterReserve: '1000 л', communication: 'Є', damages: 'відсутні', contact: 'Філатенкова Анастасія 0677428025', lat: 46.4545, lng: 30.7126 },
+      { id: 6, name: 'КНП "Одеський обласний центр нефрології та діалізу"', shortName: 'Центр нефрології та діалізу', district: 'Одеський', type: 'Обласний заклад', hasElectricity: false, alternativePower: 'Генератори', fuelReserve: '20 діб', heating: 'централізоване, відсутнє', water: 'централізоване, відсутнє', waterReserve: '6000 л', communication: 'Наявний', damages: 'відсутні', contact: 'Блохіна А.С 0983882000', lat: 46.4635, lng: 30.7406 },
+      { id: 7, name: 'КНП "Одеський регіональний клінічний протипухлинний центр"', shortName: 'Протипухлинний центр', district: 'Одеський', type: 'Обласний заклад', hasElectricity: false, alternativePower: 'Генератори', fuelReserve: '5 діб', heating: 'централізоване, наявне', water: 'централізоване, немає', waterReserve: '8000 техн. / 1000 питна', communication: 'Наявний', damages: 'немає', contact: 'Стефанов Рустам 0503367576', lat: 46.4515, lng: 30.7256 },
+      { id: 8, name: 'КНП "Одеська обласна станція переливання крові"', shortName: 'Станція переливання крові', district: 'Одеський', type: 'Обласний заклад', hasElectricity: false, alternativePower: 'Генератори (ДГА-100)', fuelReserve: '5 діб', heating: 'централізоване, наявне', water: 'централізоване, наявне', waterReserve: '4000 техн. / 1000 питна', communication: 'Наявний', damages: 'відсутні', contact: 'Ткаченко Марина 0979395274', lat: 46.4725, lng: 30.7176 },
+      { id: 16, name: 'КНП "Міська клінічна лікарня № 10"', shortName: 'МКЛ № 10', district: 'Одеський', type: 'Міська лікарня', hasElectricity: false, alternativePower: 'Генератори, Tesla', fuelReserve: '30% (поповнення)', heating: 'відсутнє', water: 'свердловина', waterReserve: 'Необмежений', communication: 'Наявний', damages: 'відсутні', contact: 'Сергій Ошовський +380671655291', lat: 46.4255, lng: 30.7656 },
+      { id: 25, name: 'КНП "Дитяча міська клінічна лікарня № 3"', shortName: 'Дитяча МКЛ № 3', district: 'Одеський', type: 'Дитяча лікарня', hasElectricity: false, alternativePower: 'Генератори, сонячні панелі, Tesla, ДБЖ', fuelReserve: 'Постійне поповнення', heating: 'централізоване, наявне', water: 'часткове', waterReserve: '16700 л', communication: 'Наявний', damages: 'відсутні', contact: 'Бурега Людмила 0964248612', lat: 46.3955, lng: 30.6956 },
+      { id: 26, name: 'КНП "Міська клінічна інфекційна лікарня"', shortName: 'Інфекційна лікарня', district: 'Одеський', type: 'Міська лікарня', hasElectricity: true, alternativePower: 'Генератор, сонячні панелі', fuelReserve: 'Обслуговує Міськсвітло', heating: 'власна котельня ТГО', water: 'є, низький тиск + свердловина', waterReserve: '6000 л', communication: 'Є', damages: 'немає', contact: 'Лаврюкова Світлана 0503337959', lat: 46.4355, lng: 30.7556 },
+      { id: 28, name: 'КНП "Дитяча міська поліклініка № 3"', shortName: 'Дитяча поліклініка № 3', district: 'Одеський', type: 'Поліклініка', hasElectricity: false, alternativePower: 'Генератор, акумуляторний генератор', fuelReserve: '5 днів', heating: 'централізоване, є', water: 'централізоване, є', waterReserve: 'Є', communication: 'Є', damages: 'ні', contact: 'Мармусевич Лариса 0662548255', lat: 46.4455, lng: 30.7856 },
+      { id: 15, name: 'КНП "Чорноморська лікарня"', shortName: 'Чорноморська лікарня', district: 'Одеський', type: 'Міська лікарня', hasElectricity: true, alternativePower: 'Генератори', fuelReserve: '7 діб', heating: 'централізоване', water: 'централізоване', waterReserve: '25000 л', communication: 'Наявний', damages: 'відсутні', contact: 'Андрєєв Юрій 063 726 2404', lat: 46.3039, lng: 30.6553 },
+      { id: 20, name: 'КНП "Овідіопольська лікарня"', shortName: 'Овідіопольська лікарня', district: 'Одеський', type: 'Селищна лікарня', hasElectricity: false, alternativePower: 'Генератори, акумулятори', fuelReserve: '5-7 днів', heating: 'власна котельня (газ + дрова)', water: 'централізоване', waterReserve: '3000 л', communication: 'Наявний', damages: 'відсутні', contact: 'Салата Тетяна 0966148862', lat: 46.2500, lng: 30.4500 },
+      { id: 27, name: 'КНП "Великодолинський консультативно-діагностичний центр"', shortName: 'Великодолинський КДЦ', district: 'Одеський', type: 'Діагностичний центр', hasElectricity: false, alternativePower: 'Генератори', fuelReserve: '5 діб', heating: 'власна котельня', water: 'централізоване (відсутнє)', waterReserve: '26000 л', communication: 'Мобільний', damages: 'немає', contact: 'Бєлємук Олена 0972859399', lat: 46.3667, lng: 30.5833 },
+      { id: 29, name: 'КНП "Грибівська амбулаторія ЗПСМ"', shortName: 'Грибівська амбулаторія', district: 'Одеський', type: 'Амбулаторія', hasElectricity: true, alternativePower: 'Генератори', fuelReserve: '5 днів', heating: 'власна котельня', water: 'комунальна свердловина', waterReserve: '2000 л', communication: 'Наявний', damages: 'відсутні', contact: 'Плохотнюк Павло +380679372845', lat: 46.3333, lng: 30.4667 },
+      { id: 32, name: 'КНП "Теплодарський центр ПМСД"', shortName: 'Теплодарський ЦПМСД', district: 'Одеський', type: 'ЦПМСД', hasElectricity: false, alternativePower: 'Генератори', fuelReserve: '5 діб', heating: 'централізоване (ні)', water: 'централізоване (так)', waterReserve: '760 л', communication: 'Є', damages: 'відсутні', contact: 'Цимбалюк Оксана 0974962775', lat: 46.5000, lng: 30.3333 },
+      { id: 33, name: 'КНП "ЦПМСД Яськівської сільської ради"', shortName: 'Яськівський ЦПМСД', district: 'Одеський', type: 'ЦПМСД', hasElectricity: false, alternativePower: 'Генератори, сонячні панелі', fuelReserve: '5 діб', heating: 'власна котельня', water: 'наявне', waterReserve: '2000 л', communication: 'Наявний', damages: 'відсутні', contact: 'Курко Денис 0960932774', lat: 46.6000, lng: 30.2500 },
+      { id: 34, name: 'КНП "Овідіопольський центр ПМСД"', shortName: 'Овідіопольський ЦПМСД', district: 'Одеський', type: 'ЦПМСД', hasElectricity: true, alternativePower: 'Генератори', fuelReserve: '5 діб', heating: 'котельня', water: 'наявне', waterReserve: '300 л', communication: 'Є', damages: 'ні', contact: 'Кабальська Оксана', lat: 46.2667, lng: 30.4333 },
+      // БІЛГОРОД-ДНІСТРОВСЬКИЙ РАЙОН
+      { id: 11, name: 'КНП "Білгород-Дністровська міська багатопрофільна лікарня"', shortName: 'Б-Дністровська міська лікарня', district: 'Білгород-Дністровський', type: 'Міська лікарня', hasElectricity: true, alternativePower: 'Генератори, акумулятори, ДБЖ', fuelReserve: '7 діб', heating: 'центральна котельня', water: 'централізоване', waterReserve: '18000 л', communication: 'Наявний', damages: 'відсутні', contact: 'Жнякін Віталій 0977226393', lat: 46.1958, lng: 30.3461 },
+      { id: 30, name: 'КНП "Татарбунарський районний центр ПМСД"', shortName: 'Татарбунарський ЦПМСД', district: 'Білгород-Дністровський', type: 'ЦПМСД', hasElectricity: true, alternativePower: 'Генератори, сонячні панелі', fuelReserve: '7 діб', heating: 'місцеві котельні', water: 'наявне', waterReserve: '5 днів', communication: 'Наявний', damages: 'відсутні', contact: 'Стогній С.В. 0962601962', lat: 45.8500, lng: 29.6167 },
+      { id: 31, name: 'КП "Саратський центр ПМСД"', shortName: 'Саратський ЦПМСД', district: 'Білгород-Дністровський', type: 'ЦПМСД', hasElectricity: true, alternativePower: 'Генератори', fuelReserve: '10 днів', heating: 'централізоване', water: 'централізоване', waterReserve: '2 дні', communication: 'Наявний', damages: 'ні', contact: 'Грибенко Сергій 0971896450', lat: 46.0167, lng: 29.6667 },
+      // ІЗМАЇЛЬСЬКИЙ РАЙОН
+      { id: 12, name: 'КНП "Кілійська багатопрофільна лікарня"', shortName: 'Кілійська лікарня', district: 'Ізмаїльський', type: 'Міська лікарня', hasElectricity: false, alternativePower: 'Генератор', fuelReserve: '7 діб', heating: 'автономне (вугільні котли)', water: 'централізоване + резерв', waterReserve: '41000 л', communication: 'Мобільний', damages: 'відсутні', contact: "Жур'ян Василій 0972174231", lat: 45.4422, lng: 29.2672 },
+      // БОЛГРАДСЬКИЙ РАЙОН - ВИПРАВЛЕНІ КООРДИНАТИ
+      { id: 23, name: 'КНП "Бессарабська багатопрофільна лікарня"', shortName: 'Бессарабська лікарня', district: 'Болградський', type: 'Селищна лікарня', hasElectricity: true, alternativePower: 'Дизель-генератор', fuelReserve: '7 діб', heating: 'власна котельня', water: 'централізоване', waterReserve: '3000 л', communication: 'Не порушений', damages: 'немає', contact: 'Ротар С.І. 0982674276', lat: 46.1865, lng: 29.1501 },
+      // РОЗДІЛЬНЯНСЬКИЙ РАЙОН
+      { id: 14, name: 'КНП "Роздільнянська багатопрофільна лікарня"', shortName: 'Роздільнянська лікарня', district: 'Роздільнянський', type: 'Міська лікарня', hasElectricity: true, alternativePower: 'Генератори, сонячні панелі', fuelReserve: '7 діб', heating: 'централізоване, наявне', water: 'централізоване + свердловина', waterReserve: '6000 л', communication: 'Наявний', damages: 'відсутні', contact: 'Осипов В.О. 0669244340', lat: 46.8461, lng: 30.0828 },
+      { id: 17, name: 'КНП "Захарівська багатопрофільна лікарня"', shortName: 'Захарівська лікарня', district: 'Роздільнянський', type: 'Сільська лікарня', hasElectricity: true, alternativePower: 'Генератори, сонячні панелі', fuelReserve: '7 діб', heating: 'власна котельня', water: 'централізоване', waterReserve: '5000 л', communication: 'Наявний', damages: 'відсутні', contact: 'Ганзій А.М 0507247345', lat: 47.1167, lng: 30.0833 },
+      { id: 37, name: 'КНП "Цебриківський центр ПМСД"', shortName: 'Цебриківський ЦПМСД', district: 'Роздільнянський', type: 'ЦПМСД', hasElectricity: true, alternativePower: 'Генератори (1 з 2)', fuelReserve: '7 днів', heating: 'власна котельня (газ)', water: 'власна свердловина', waterReserve: 'Є', communication: 'Є', damages: 'ні', contact: 'Платонова Л.В. 0967459159', lat: 47.0500, lng: 30.0667 },
+      { id: 38, name: 'КНП "Захарівський центр ПМСД"', shortName: 'Захарівський ЦПМСД', district: 'Роздільнянський', type: 'ЦПМСД', hasElectricity: false, alternativePower: 'Генератор, сонячні панелі 7 кВт', fuelReserve: '5 днів', heating: 'власна котельня', water: 'централізоване', waterReserve: '400 л', communication: 'Є', damages: 'ні', contact: '', lat: 47.1250, lng: 30.0750 },
+      { id: 39, name: 'КНП "Дивізійський центр ПМСД"', shortName: 'Дивізійський ЦПМСД', district: 'Роздільнянський', type: 'ЦПМСД', hasElectricity: true, alternativePower: 'Генератори', fuelReserve: '10 днів', heating: 'власна котельня', water: 'наявне', waterReserve: '20 діб', communication: 'Є', damages: 'ні', contact: 'Бакуменко Л. 0682726947', lat: 46.9000, lng: 30.0167 },
+      // ПОДІЛЬСЬКИЙ РАЙОН
+      { id: 9, name: 'КП "Балтська багатопрофільна лікарня"', shortName: 'Балтська лікарня', district: 'Подільський', type: 'Міська лікарня', hasElectricity: true, alternativePower: 'Генератори, сонячна станція, ДБЖ', fuelReserve: '10 діб', heating: 'власна котельня', water: 'свердловина', waterReserve: '20000 л', communication: 'Наявний', damages: 'відсутні', contact: 'Кацмаза Роман 0952284517', lat: 47.9361, lng: 29.6233 },
+      { id: 13, name: 'КНП "Подільська міська лікарня"', shortName: 'Подільська лікарня', district: 'Подільський', type: 'Міська лікарня', hasElectricity: false, alternativePower: 'Генератори, сонячні панелі, акумулятори', fuelReserve: '7 діб', heating: 'власна котельня', water: 'централізоване', waterReserve: '6000 л', communication: 'Наявний', damages: 'відсутні', contact: 'Літянський Дмитро 0984842595', lat: 47.7494, lng: 29.5300 },
+      { id: 18, name: 'КНП "Любашівська багатопрофільна лікарня"', shortName: 'Любашівська лікарня', district: 'Подільський', type: 'Сільська лікарня', hasElectricity: true, alternativePower: 'Генератори, сонячні панелі, акумулятори', fuelReserve: '7 діб', heating: 'власна котельня', water: 'власна свердловина', waterReserve: '5000 л', communication: 'Наявний', damages: 'відсутні', contact: 'Фомін Дмитро 0674896441', lat: 47.8389, lng: 30.2611 },
+      { id: 19, name: 'КНП "Кодимська лікарня"', shortName: 'Кодимська лікарня', district: 'Подільський', type: 'Міська лікарня', hasElectricity: true, alternativePower: 'Генератори, сонячні панелі, ДБЖ', fuelReserve: '20 днів', heating: 'альтернативне', water: 'свердловина + централізоване', waterReserve: '5000 л', communication: 'Наявний', damages: 'відсутні', contact: 'Волошина Лариса 0967229937', lat: 48.1033, lng: 29.1208 },
+      { id: 21, name: 'КНП "ЦРЛ Подільського району"', shortName: 'ЦРЛ Подільського р-ну', district: 'Подільський', type: 'ЦРЛ', hasElectricity: true, alternativePower: 'Генератори', fuelReserve: '20 днів', heating: 'централізоване', water: 'централізоване', waterReserve: '7000 л', communication: 'Наявний', damages: 'відсутні', contact: 'Качан О.М. 0953204308', lat: 47.4167, lng: 29.5500 },
+      { id: 22, name: 'КНП "Савранська лікарня"', shortName: 'Савранська лікарня', district: 'Подільський', type: 'Селищна лікарня', hasElectricity: true, alternativePower: 'Генератори', fuelReserve: '5 діб', heating: 'власна котельня', water: 'централізоване + свердловина', waterReserve: '1000 л', communication: 'Мобільний', damages: 'відсутні', contact: 'Ткач Станіслав 0679422414', lat: 48.1331, lng: 30.0836 },
+      { id: 35, name: 'КНП "ЦПМСД Куяльницької сільської ради"', shortName: 'Куяльницький ЦПМСД', district: 'Подільський', type: 'ЦПМСД', hasElectricity: true, alternativePower: 'Генератори', fuelReserve: '5 днів', heating: 'централізоване (ні)', water: 'централізоване (так)', waterReserve: '2205 л', communication: 'Наявний', damages: 'відсутні', contact: 'Серединська Т.В. 0668838347', lat: 46.8333, lng: 30.3833 },
+      { id: 36, name: 'КНП "ЦПМСД Подільської міської ради"', shortName: 'Подільський ЦПМСД', district: 'Подільський', type: 'ЦПМСД', hasElectricity: true, alternativePower: 'Генератори', fuelReserve: '7 діб', heating: 'котельня', water: 'централізоване', waterReserve: '2000 л', communication: 'Наявний', damages: 'відсутні', contact: 'Мемей Л.О. 0957166223', lat: 47.7556, lng: 29.5389 },
+      // БЕРЕЗІВСЬКИЙ РАЙОН
+      { id: 10, name: 'КНП "Березівська центральна міська лікарня"', shortName: 'Березівська лікарня', district: 'Березівський', type: 'Міська лікарня', hasElectricity: false, alternativePower: 'Генератор, сонячні батареї', fuelReserve: '10 діб', heating: 'власна котельня', water: 'свердловина', waterReserve: '25000 л', communication: 'Наявний', damages: 'відсутні', contact: 'Алейнов Олександр 0688730373', lat: 47.1914, lng: 30.9161 },
+      { id: 24, name: 'КНП "Іванівський медичний центр"', shortName: 'Іванівський мед. центр', district: 'Березівський', type: 'Селищний центр', hasElectricity: true, alternativePower: 'Генератори, Tesla', fuelReserve: '5 днів', heating: 'альтернативне', water: 'альтернативне', waterReserve: '8000 л', communication: 'Є', damages: 'відсутні', contact: 'Мацкул Галина 0505170002', lat: 47.2833, lng: 30.7167 }
     ];
     
     let map, markers = [], districtLayers = [], districtLabels = [], currentFilter = 'all', selectedFacilityId = null, currentTheme = 'dark', tileLayer = null;
@@ -460,13 +460,13 @@
         });
         layer.on('mouseover', (e) => { e.target.setStyle({ fillOpacity: 0.5, weight: 4 }); });
         layer.on('mouseout', (e) => { e.target.setStyle({ fillOpacity: 0.35, weight: 3 }); });
-        layer.bindTooltip(`<strong>${districtName} СЂР°Р№РѕРЅ</strong><br>${districtStatusLabels[status]}<br>${districtInfo[districtName].population}`, {
+        layer.bindTooltip(`<strong>${districtName} район</strong><br>${districtStatusLabels[status]}<br>${districtInfo[districtName].population}`, {
           permanent: false, direction: 'center', className: 'district-tooltip'
         });
         layer.addTo(map);
         districtLayers.push(layer);
         
-        // Р”РѕРґР°С”РјРѕ РїС–РґРїРёСЃ СЂР°Р№РѕРЅСѓ
+        // Додаємо підпис району
         const info = districtInfo[districtName];
         if (info && info.labelPos) {
           const label = L.marker(info.labelPos, {
@@ -501,9 +501,9 @@
             <div class="district-card-status ${statusClass}"><div class="dot"></div>${districtStatusLabels[status]}</div>
           </div>
           <div class="district-card-stats">
-            <span>рџ‘Ґ ${info.population}</span>
-            <span>рџЏҐ ${facilities.length} Р·Р°РєР»Р°РґС–РІ</span>
-            <span>вљЎ ${withPower}/${facilities.length}</span>
+            <span>👥 ${info.population}</span>
+            <span>🏥 ${facilities.length} закладів</span>
+            <span>⚡ ${withPower}/${facilities.length}</span>
           </div>
         </div>`;
       }).join('');
@@ -535,7 +535,7 @@
       markers = [];
       getFilteredFacilities().forEach(f => {
         const marker = L.marker([f.lat, f.lng], { icon: createMarkerIcon(f.hasElectricity, selectedFacilityId === f.id) });
-        marker.bindPopup(`<div class="popup-title">${f.shortName}</div><div class="popup-district">${f.district} СЂР°Р№РѕРЅ</div><div class="popup-status ${f.hasElectricity?'on':'off'}"><span></span>${f.hasElectricity?'Р„ РµР»РµРєС‚СЂРѕРїРѕСЃС‚Р°С‡Р°РЅРЅСЏ':'Р‘РµР· РµР»РµРєС‚СЂРѕРїРѕСЃС‚Р°С‡Р°РЅРЅСЏ'}</div>`);
+        marker.bindPopup(`<div class="popup-title">${f.shortName}</div><div class="popup-district">${f.district} район</div><div class="popup-status ${f.hasElectricity?'on':'off'}"><span></span>${f.hasElectricity?'Є електропостачання':'Без електропостачання'}</div>`);
         marker.on('click', () => showDetail(f.id));
         marker.addTo(map);
         markers.push(marker);
@@ -590,13 +590,13 @@
     function renderFacilityList() {
       const list = document.getElementById('facilityList');
       const filtered = getFilteredFacilities();
-      if (!filtered.length) { list.innerHTML = '<div class="empty-state"><div class="icon">рџ”Ќ</div><div>Р—Р°РєР»Р°РґС–РІ РЅРµ Р·РЅР°Р№РґРµРЅРѕ</div></div>'; return; }
+      if (!filtered.length) { list.innerHTML = '<div class="empty-state"><div class="icon">🔍</div><div>Закладів не знайдено</div></div>'; return; }
       list.innerHTML = filtered.map(f => `<div class="facility-item" onclick="showDetail(${f.id})">
         <div class="facility-status ${f.hasElectricity?'on':'off'}"></div>
         <div class="facility-info">
           <div class="facility-name">${f.shortName}</div>
-          <div class="facility-meta">${f.district} СЂР°Р№РѕРЅ вЂў ${f.type}</div>
-          <div class="facility-tags"><span>в›Ѕ ${f.fuelReserve}</span>${f.heating.includes('РєРѕС‚РµР»СЊРЅСЏ')?'<span class="heat">рџ”Ґ РєРѕС‚РµР»СЊРЅСЏ</span>':''}</div>
+          <div class="facility-meta">${f.district} район • ${f.type}</div>
+          <div class="facility-tags"><span>⛽ ${f.fuelReserve}</span>${f.heating.includes('котельня')?'<span class="heat">🔥 котельня</span>':''}</div>
         </div>
         <svg class="facility-arrow" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
       </div>`).join('');
@@ -610,9 +610,9 @@
       document.getElementById('detailView').classList.add('active');
       document.getElementById('detailName').textContent = f.shortName;
       document.getElementById('detailFullName').textContent = f.name;
-      document.getElementById('detailStatus').innerHTML = `<div class="status-badge ${f.hasElectricity?'on':'off'}"><div class="status-dot"></div>${f.hasElectricity?'Р•Р»РµРєС‚СЂРѕРїРѕСЃС‚Р°С‡Р°РЅРЅСЏ РЅР°СЏРІРЅРµ':'Р•Р»РµРєС‚СЂРѕРїРѕСЃС‚Р°С‡Р°РЅРЅСЏ РІС–РґСЃСѓС‚РЅС”'}</div>`;
-      const rows = [['вљЎ','РђР»СЊС‚РµСЂРЅР°С‚РёРІРЅРµ Р¶РёРІР»РµРЅРЅСЏ',f.alternativePower],['в›Ѕ','Р—Р°РїР°СЃ РїР°Р»РёРІР°',f.fuelReserve],['рџ”Ґ','РўРµРїР»РѕРїРѕСЃС‚Р°С‡Р°РЅРЅСЏ',f.heating],['рџ’§','Р’РѕРґРѕРїРѕСЃС‚Р°С‡Р°РЅРЅСЏ',f.water],['рџљ°','Р—Р°РїР°СЃ РІРѕРґРё',f.waterReserve],['рџ“Ў','Р—РІ\'СЏР·РѕРє',f.communication],['рџ’Ґ','РџРѕС€РєРѕРґР¶РµРЅРЅСЏ',f.damages],['рџ“Ќ','Р Р°Р№РѕРЅ',f.district],['рџЏҐ','РўРёРї',f.type]];
-      if (f.contact) rows.push(['рџ“ћ','РљРѕРЅС‚Р°РєС‚',f.contact]);
+      document.getElementById('detailStatus').innerHTML = `<div class="status-badge ${f.hasElectricity?'on':'off'}"><div class="status-dot"></div>${f.hasElectricity?'Електропостачання наявне':'Електропостачання відсутнє'}</div>`;
+      const rows = [['⚡','Альтернативне живлення',f.alternativePower],['⛽','Запас палива',f.fuelReserve],['🔥','Теплопостачання',f.heating],['💧','Водопостачання',f.water],['🚰','Запас води',f.waterReserve],['📡','Зв\'язок',f.communication],['💥','Пошкодження',f.damages],['📍','Район',f.district],['🏥','Тип',f.type]];
+      if (f.contact) rows.push(['📞','Контакт',f.contact]);
       document.getElementById('detailInfo').innerHTML = rows.map(r => `<div class="info-row"><div class="info-icon">${r[0]}</div><div class="info-content"><div class="info-label">${r[1]}</div><div class="info-value">${r[2]}</div></div></div>`).join('');
       map.flyTo([f.lat, f.lng], 14, { duration: 0.8 });
       updateMarkers();
@@ -625,20 +625,20 @@
       if (!CONFIG.GOOGLE_SHEETS_URL) return;
       const ds = document.getElementById('dataSource');
       ds.classList.add('loading');
-      ds.querySelector('span').textContent = 'Р—Р°РІР°РЅС‚Р°Р¶РµРЅРЅСЏ...';
+      ds.querySelector('span').textContent = 'Завантаження...';
       try {
         const res = await fetch(CONFIG.GOOGLE_SHEETS_URL);
         const csv = await res.text();
         const data = parseCSV(csv);
         if (data.length) { facilitiesData = data; updateStats(); updateMarkers(); renderFacilityList(); renderDistrictOverview(); ds.classList.remove('loading','error'); ds.querySelector('span').textContent = 'Google Sheets'; }
-      } catch(e) { console.error(e); ds.classList.remove('loading'); ds.classList.add('error'); ds.querySelector('span').textContent = 'РџРѕРјРёР»РєР° Р·Р°РІР°РЅС‚Р°Р¶РµРЅРЅСЏ'; }
+      } catch(e) { console.error(e); ds.classList.remove('loading'); ds.classList.add('error'); ds.querySelector('span').textContent = 'Помилка завантаження'; }
     }
     
     function parseCSV(csv) {
       const lines = csv.trim().split('\n');
       return lines.slice(1).map((line, i) => {
         const v = line.split(',');
-        return { id: i+1, name: v[0]||'', shortName: v[1]||v[0]||'', district: v[2]||'', type: v[3]||'', hasElectricity: v[4]?.toLowerCase()==='С‚Р°Рє'||v[4]?.toLowerCase()==='true', alternativePower: v[5]||'', fuelReserve: v[6]||'', heating: v[7]||'', water: v[8]||'', waterReserve: v[9]||'', communication: v[10]||'', damages: v[11]||'', contact: v[12]||'', lat: parseFloat(v[13])||46.5, lng: parseFloat(v[14])||30.0 };
+        return { id: i+1, name: v[0]||'', shortName: v[1]||v[0]||'', district: v[2]||'', type: v[3]||'', hasElectricity: v[4]?.toLowerCase()==='так'||v[4]?.toLowerCase()==='true', alternativePower: v[5]||'', fuelReserve: v[6]||'', heating: v[7]||'', water: v[8]||'', waterReserve: v[9]||'', communication: v[10]||'', damages: v[11]||'', contact: v[12]||'', lat: parseFloat(v[13])||46.5, lng: parseFloat(v[14])||30.0 };
       }).filter(f => f.name && f.lat && f.lng);
     }
     
